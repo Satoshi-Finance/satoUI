@@ -46,6 +46,8 @@ function App() {
     satoStakingAddr: "0xb64EE0d54EA724753db319771791474C2EED6575",
     satoCommunityIssuanceAddr: "0x9DeFF442F3837797C7F4783393A9eFe3d5e4FDd9",
     satoLockupFactoryAddr: "0x28c0e5160AB7B821A98745A3236aD2414F5dC041",
+    uniPoolAddr: "0xFCd61Cd94bCB3191ef4719c7322B93932237861b",
+    lpTokenAddr: "0x245A58c8F8d5b5453f6f239c9aD9DeCdA4d408B4",
   };
   const contractsAddresses = testnet
     ? contractsAddressesTestnet
@@ -68,6 +70,8 @@ function App() {
     '[{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_activePoolAddress","type":"address"}],"name":"ActivePoolAddressSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_debtTokenAddress","type":"address"}],"name":"BTUSDTokenAddressSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_borrowerOperationsAddress","type":"address"}],"name":"BorrowerOperationsAddressSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_account","type":"address"},{"indexed":false,"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"EtherSent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"_F_BTUSD","type":"uint256"}],"name":"F_BTUSDUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"_F_ETH","type":"uint256"}],"name":"F_ETHUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_staker","type":"address"}],"name":"PremiumStaking","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_satoTokenAddress","type":"address"}],"name":"SATOTokenAddressSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"staker","type":"address"},{"indexed":false,"internalType":"uint256","name":"newStake","type":"uint256"}],"name":"StakeChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_staker","type":"address"},{"indexed":false,"internalType":"uint256","name":"_F_ETH","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"_F_BTUSD","type":"uint256"}],"name":"StakerSnapshotsUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"staker","type":"address"},{"indexed":false,"internalType":"uint256","name":"debtGain","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"ETHGain","type":"uint256"}],"name":"StakingGainsWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"_totalSATOStaked","type":"uint256"}],"name":"TotalSATOStakedUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_troveManager","type":"address"}],"name":"TroveManagerAddressSet","type":"event"},{"inputs":[],"name":"DECIMAL_PRECISION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"F_ETH","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"F_LUSD","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"NAME","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PREMIUM_STAKING","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"activePoolAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"borrowerOperationsAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"collateral","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"debtToken","outputs":[{"internalType":"contract IBTUSDToken","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getPendingETHGain","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getPendingLUSDGain","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_staker","type":"address"}],"name":"getStakes","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"goPremiumStaking","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_staker","type":"address"}],"name":"ifPremiumStaking","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_collRedemptionFee","type":"uint256"}],"name":"increaseF_ETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_debtMintFee","type":"uint256"}],"name":"increaseF_LUSD","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"isOwner","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"premiumStakers","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"satoToken","outputs":[{"internalType":"contract ISATOToken","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_satoTokenAddress","type":"address"},{"internalType":"address","name":"_debtTokenAddress","type":"address"},{"internalType":"address","name":"_troveManagerAddress","type":"address"},{"internalType":"address","name":"_borrowerOperationsAddress","type":"address"},{"internalType":"address","name":"_activePoolAddress","type":"address"},{"internalType":"address","name":"_collAddress","type":"address"}],"name":"setAddresses","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"snapshots","outputs":[{"internalType":"uint256","name":"F_ETH_Snapshot","type":"uint256"},{"internalType":"uint256","name":"F_BTUSD_Snapshot","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"stakes","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSATOStaked","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"troveManagerAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"unstake","outputs":[],"stateMutability":"nonpayable","type":"function"}]';
   const communityIssuance_abi =
     '[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_satoTokenAddress","type":"address"}],"name":"SATOTokenAddressSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_stabilityPoolAddress","type":"address"}],"name":"StabilityPoolAddressSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"_totalSATOIssued","type":"uint256"}],"name":"TotalSATOIssuedUpdated","type":"event"},{"inputs":[],"name":"DECIMAL_PRECISION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"ISSUANCE_FACTOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"NAME","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"SATOSupplyCap","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"SECONDS_IN_ONE_MINUTE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"deploymentTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isOwner","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"issueSATO","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"satoToken","outputs":[{"internalType":"contract ISATOToken","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_account","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"sendSATO","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_satoTokenAddress","type":"address"},{"internalType":"address","name":"_stabilityPoolAddress","type":"address"}],"name":"setAddresses","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"stabilityPoolAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSATOIssued","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]';
+  const uniPool_abi =
+    '[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"RewardAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"RewardPaid","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_satoTokenAddress","type":"address"}],"name":"SATOTokenAddressChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_uniTokenAddress","type":"address"}],"name":"UniTokenAddressChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdrawn","type":"event"},{"inputs":[],"name":"NAME","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claimReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"duration","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"earned","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isOwner","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lastTimeRewardApplicable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lastUpdateTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"periodFinish","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardPerToken","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardPerTokenStored","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rewardRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"rewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"satoToken","outputs":[{"internalType":"contract ISATOToken","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_satoTokenAddress","type":"address"},{"internalType":"address","name":"_uniTokenAddress","type":"address"},{"internalType":"uint256","name":"_duration","type":"uint256"}],"name":"setParams","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"uniToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userRewardPerTokenPaid","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawAndClaim","outputs":[],"stateMutability":"nonpayable","type":"function"}]';
   const erc20_abi =
     '[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"receivers","type":"address[]"},{"name":"amounts","type":"uint256[]"}],"name":"multiTransfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"from","type":"address"},{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"amount","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"account","type":"address"},{"name":"amount","type":"uint256"}],"name":"burnFrom","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"value","type":"uint256"}],"name":"findOnePercent","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"basePercent","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":true,"stateMutability":"payable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"}]';
 
@@ -207,6 +211,8 @@ function App() {
       let _satoStakingContract = getSatoStakingSignerContract();
       const _priceFeedContract = getPriceFeedSignerContract();
       const _communityIssuanceContract = getCommunityIssuanceSignerContract();
+      const _lpTokenContract = getLpTokenSignerContract();
+      const _uniPoolContract = getUniPoolSignerContract();
       let _collPrice = utils.parseUnits(
         (await _priceFeedContract.callStatic.fetchPrice()).toString(),
         0
@@ -382,6 +388,28 @@ function App() {
         document.querySelector("#satoStakedInput").value = zeroBN;
         document.querySelector("#redemptionEarnedInput").value = zeroBN;
         document.querySelector("#borrowingEarnedInput").value = zeroBN;
+      }
+
+      //// LP Mining UI initialization setup
+      let _stakeLPNeedToApprove = await checkStakeLPApproval(
+        connectedAddr,
+        _lpTokenContract
+      );
+      if (_stakeLPNeedToApprove.gt(zeroBN)) {
+        document.querySelector("#approveStakeLPBtn").style["display"] =
+          "inline-block";
+      } else {
+        document.querySelector("#approveStakeLPBtn").style["display"] = "none";
+      }
+      let _stakeLPEarning = await getLPRewardCall(
+        connectedAddr,
+        _uniPoolContract
+      );
+      if (_stakeLPEarning.gt(zeroBN)) {
+        document.querySelector("#claimLPRewardBtn").style["display"] =
+          "inline-block";
+      } else {
+        document.querySelector("#claimLPRewardBtn").style["display"] = "none";
       }
     } // end connectedAddr not null
   }
@@ -903,6 +931,82 @@ function App() {
   };
 
   ///////////////////////////////////////////////////////////////////////////
+  // UI listener methods for LP mining
+  ///////////////////////////////////////////////////////////////////////////
+
+  window.approveStakeLPListener = async function approveStakeLPListener() {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    let connectedAddr = accounts[0];
+
+    const lpTokenContract = getLpTokenSignerContract();
+    let _approveSuccess = await approveTokenSpender(
+      lpTokenContract,
+      contractsAddresses.uniPoolAddr,
+      decimal1Billion
+    );
+    if (_approveSuccess) {
+      document.querySelector("#approveStakeLPBtn").style["display"] = "none";
+    }
+  };
+
+  window.claimLPRewardListener = async function claimLPRewardListener() {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    let connectedAddr = accounts[0];
+
+    const uniPoolContract = getUniPoolSignerContract();
+    let _claimLPRewardSuccess = await claimLPRewardCall(
+      connectedAddr,
+      uniPoolContract
+    );
+    if (_claimLPRewardSuccess) {
+      reloadPage();
+    }
+  };
+
+  window.stakeLPListener = async function stakeLPListener() {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    let connectedAddr = accounts[0];
+
+    const uniPoolContract = getUniPoolSignerContract();
+    const lpTokenContract = getLpTokenSignerContract();
+    let _stakeAmt = await lpTokenContract.balanceOf(connectedAddr);
+    if (_stakeAmt.gt(zeroBN)) {
+      let _stakeLPSuccess = await stakeLPCall(
+        connectedAddr,
+        uniPoolContract,
+        _stakeAmt
+      );
+      if (_stakeLPSuccess) {
+        reloadPage();
+      }
+    } else {
+      showToastMessage("LP amount to stake should be above zero");
+    }
+  };
+
+  window.withdrawLPListener = async function withdrawLPListener() {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    let connectedAddr = accounts[0];
+
+    const uniPoolContract = getUniPoolSignerContract();
+    let _withdrawLPSuccess = await withdrawLPCall(
+      connectedAddr,
+      uniPoolContract
+    );
+    if (_withdrawLPSuccess) {
+      reloadPage();
+    }
+  };
+
+  ///////////////////////////////////////////////////////////////////////////
   // General UI methods
   ///////////////////////////////////////////////////////////////////////////
 
@@ -1078,6 +1182,26 @@ function App() {
       "click",
       window.premiumStakingListener
     );
+
+    ///////////////////////////////////////////////////////////////////////////
+    // bind UI listeners for Trove operations
+    ///////////////////////////////////////////////////////////////////////////
+    const _approveStakeLPButton = document.querySelector("#approveStakeLPBtn");
+    removeAddListener(
+      _approveStakeLPButton,
+      "click",
+      window.approveStakeLPListener
+    );
+    const _stakeLPButton = document.querySelector("#stakeLPBtn");
+    removeAddListener(_stakeLPButton, "click", window.stakeLPListener);
+    const _withdrawLPButton = document.querySelector("#unstakeLPBtn");
+    removeAddListener(_withdrawLPButton, "click", window.withdrawLPListener);
+    const _claimLPRewardButton = document.querySelector("#claimLPRewardBtn");
+    removeAddListener(
+      _claimLPRewardButton,
+      "click",
+      window.claimLPRewardListener
+    );
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1087,6 +1211,31 @@ function App() {
   async function checkRecoveryModeCall(price, troveManagerContract) {
     let _inRecoveryMode = await troveManagerContract.checkRecoveryMode(price);
     return _inRecoveryMode;
+  }
+
+  async function checkStakeLPApproval(_myAddress, lpTokenContract) {
+    let _approvedBal = utils.parseUnits(
+      (
+        await lpTokenContract.allowance(
+          _myAddress,
+          contractsAddresses.uniPoolAddr
+        )
+      ).toString(),
+      0
+    );
+    let _lpBal = await lpTokenContract.balanceOf(_myAddress);
+    let _needToApprove =
+      _approvedBal.eq(zeroBN) || _approvedBal.lt(_lpBal)
+        ? _lpBal.sub(_approvedBal).add(decimal1Billion)
+        : zeroBN;
+    console.log(
+      _myAddress +
+        " has LP allowance to UniPool=" +
+        _approvedBal +
+        ",lpToStake=" +
+        _lpBal
+    );
+    return _needToApprove;
   }
 
   async function checkRepayDebtApproval(
@@ -1239,6 +1388,12 @@ function App() {
     return new Contract(contractsAddresses.btUSDAddr, erc20_abi, signer);
   }
 
+  function getLpTokenSignerContract() {
+    const web3Provider = new providers.Web3Provider(window.ethereum);
+    const signer = web3Provider.getSigner();
+    return new Contract(contractsAddresses.lpTokenAddr, erc20_abi, signer);
+  }
+
   function getPriceFeedSignerContract() {
     const web3Provider = new providers.Web3Provider(window.ethereum);
     const signer = web3Provider.getSigner();
@@ -1307,6 +1462,12 @@ function App() {
       communityIssuance_abi,
       signer
     );
+  }
+
+  function getUniPoolSignerContract() {
+    const web3Provider = new providers.Web3Provider(window.ethereum);
+    const signer = web3Provider.getSigner();
+    return new Contract(contractsAddresses.uniPoolAddr, uniPool_abi, signer);
   }
 
   /////////////////////////////////////////////////
@@ -1774,6 +1935,48 @@ function App() {
   }
 
   /////////////////////////////////////////////////
+  // Contract Interactions: LP Mining
+  /////////////////////////////////////////////////
+
+  async function stakeLPCall(connectedAddr, uniPoolContract, _stakeAmt) {
+    let _params = await prepareTxParams();
+    console.log(
+      connectedAddr + " stake into UniPool with lp=" + fromBn(_stakeAmt)
+    );
+    let _stakeLPTx = await uniPoolContract.stake(_stakeAmt);
+    let _stakeLPTxSuccess = await waitSubmittedTx(_stakeLPTx, "STAKE LP");
+    return _stakeLPTxSuccess;
+  }
+
+  async function withdrawLPCall(connectedAddr, uniPoolContract) {
+    let _params = await prepareTxParams();
+    console.log(connectedAddr + " withdraw from UniPool");
+    let _withdrawLPTx = await uniPoolContract.withdrawAndClaim();
+    let _withdrawLPTxSuccess = await waitSubmittedTx(
+      _withdrawLPTx,
+      "WITHDRAW LP"
+    );
+    return _withdrawLPTxSuccess;
+  }
+
+  async function claimLPRewardCall(connectedAddr, uniPoolContract) {
+    let _params = await prepareTxParams();
+    console.log(connectedAddr + " claim from UniPool");
+    let _claimLPTx = await uniPoolContract.claimReward();
+    let _claimLPTxSuccess = await waitSubmittedTx(
+      _claimLPTx,
+      "CLAIM LP REWARD"
+    );
+    return _claimLPTxSuccess;
+  }
+
+  async function getLPRewardCall(connectedAddr, uniPoolContract) {
+    let _earnedLPReward = await uniPoolContract.earned(connectedAddr);
+    console.log(connectedAddr + " got LP reward SATO=" + _earnedLPReward);
+    return _earnedLPReward;
+  }
+
+  /////////////////////////////////////////////////
   // JS Utilies
   /////////////////////////////////////////////////
   function checkIfNull(val) {
@@ -1854,7 +2057,7 @@ function App() {
             rel="noreferrer noopener"
           >
             {" "}
-            TRADE
+            LIQUIDITY
           </a>
         </span>
       </div>
@@ -1953,6 +2156,22 @@ function App() {
         </li>
       </ul>
 
+      <ReactTooltip
+        id="lpMiningTip"
+        type="success"
+        effect="solid"
+      ></ReactTooltip>
+      <ReactTooltip id="systemTCRTip" type="info" effect="solid"></ReactTooltip>
+      <ReactTooltip
+        id="totalSPDepositTip"
+        type="info"
+        effect="solid"
+      ></ReactTooltip>
+      <ReactTooltip
+        id="totalSATOStakedTip"
+        type="warning"
+        effect="solid"
+      ></ReactTooltip>
       <div class="tab-content" id="myTabContent">
         <div
           class="tab-pane fade show active"
@@ -1964,7 +2183,7 @@ function App() {
 
           <div class="row">
             <div class="col-sm-3">
-              <div class="card">
+              <div class="card" style={{ border: "none" }}>
                 <div class="card-body">
                   <h5 class="card-title">Total Troves</h5>
                   <p class="card-text" id="statsTotalTrove"></p>
@@ -1972,7 +2191,7 @@ function App() {
               </div>
             </div>
             <div class="col-sm-3">
-              <div class="card">
+              <div class="card" style={{ border: "none" }}>
                 <div class="card-body">
                   <h5 class="card-title">
                     Total Collateral <img src="/BTCB.png"></img>
@@ -1982,7 +2201,7 @@ function App() {
               </div>
             </div>
             <div class="col-sm-3">
-              <div class="card">
+              <div class="card" style={{ border: "none" }}>
                 <div class="card-body">
                   <h5 class="card-title">
                     Total Debt<img src="/btUSD.png"></img>
@@ -1992,15 +2211,21 @@ function App() {
               </div>
             </div>
             <div class="col-sm-3">
-              <div class="card">
+              <div class="card" style={{ border: "none" }}>
                 <div class="card-body">
-                  <h5 class="card-title">System TCR</h5>
+                  <h5
+                    class="card-title"
+                    data-tip="System will enter Recovery Mode if TCR drops below 130%"
+                    data-for="systemTCRTip"
+                  >
+                    System TCR
+                  </h5>
                   <p class="card-text" id="statsSystemTCR"></p>
                 </div>
               </div>
             </div>
             <div class="col-sm-3">
-              <div class="card">
+              <div class="card" style={{ border: "none" }}>
                 <div class="card-body">
                   <h5 class="card-title">Collateral Price</h5>
                   <p class="card-text" id="statsCollateralPrice"></p>
@@ -2008,9 +2233,13 @@ function App() {
               </div>
             </div>
             <div class="col-sm-3">
-              <div class="card">
+              <div class="card" style={{ border: "none" }}>
                 <div class="card-body">
-                  <h5 class="card-title">
+                  <h5
+                    class="card-title"
+                    data-tip="Deposit in Stability Pool will earn SATO issuance & liquidated collateral"
+                    data-for="totalSPDepositTip"
+                  >
                     Total Stability Pool Deposit<img src="/btUSD.png"></img>
                   </h5>
                   <p class="card-text" id="statsTotalSPDeposit"></p>
@@ -2018,9 +2247,13 @@ function App() {
               </div>
             </div>
             <div class="col-sm-3">
-              <div class="card">
+              <div class="card" style={{ border: "none" }}>
                 <div class="card-body">
-                  <h5 class="card-title">
+                  <h5
+                    class="card-title"
+                    data-tip="Stake SATO will earn protocol fee in borrowing and redemption"
+                    data-for="totalSATOStakedTip"
+                  >
                     Total SATO Staked <img src="/SATO.png"></img>
                   </h5>
                   <p class="card-text" id="statsTotalSATOStaked"></p>
@@ -2028,12 +2261,51 @@ function App() {
               </div>
             </div>
             <div class="col-sm-3">
-              <div class="card">
+              <div class="card" style={{ border: "none" }}>
                 <div class="card-body">
-                  <h5 class="card-title">
-                    Total SATO yet to be rewarded <img src="/SATO.png"></img>
+                  <h5
+                    class="card-title"
+                    data-tip="Get btUSD LP from PancakeSwap and this LP Mining will end in 90 days"
+                    data-for="lpMiningTip"
+                  >
+                    LP Mining
                   </h5>
-                  <p class="card-text" id="statsTotalSATOToBeMined"></p>
+                  <p class="card-text" id="statsTotalSATOToBeMined">
+                    <div class="col-auto">
+                      <button
+                        type="button"
+                        class="btn btn-primary mb-2"
+                        id="approveStakeLPBtn"
+                        style={{ margin: 5 }}
+                      >
+                        Approve
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-success mb-2"
+                        id="stakeLPBtn"
+                        style={{ margin: 5 }}
+                      >
+                        Stake
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger mb-2"
+                        id="unstakeLPBtn"
+                        style={{ margin: 5 }}
+                      >
+                        Unstake
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-info mb-2"
+                        id="claimLPRewardBtn"
+                        style={{ margin: 5 }}
+                      >
+                        Claim Reward
+                      </button>
+                    </div>
+                  </p>
                 </div>
               </div>
             </div>
