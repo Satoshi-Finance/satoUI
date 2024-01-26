@@ -27,6 +27,12 @@ function App() {
   const STAKING_PREMIUM = utils.parseEther("1024");
   const SP_SATO_REWARD_CAP = utils.parseEther("32000000");
   const SP_SATO_REWARD_PER_SECOND = utils.parseUnits("999998681227695000", 0);
+	
+  const SATO_SYMBOL = 'SATO';
+  const SATO_IMG_URL = 'https://www.satofi.app/SATO.png';
+  const btUSD_SYMBOL = 'btUSD';
+  const btUSD_IMG_URL = 'https://www.satofi.app/btUSD.png';
+  const TOKEN_DECIMAL = 18;
 
   /////////////////////////////////////////////////
   // Smart Contracts addresses
@@ -102,6 +108,7 @@ function App() {
         });
         await checkConnectedChain(_chainIdHex);
         await checkTroveExistence();
+        await getGasPrice();
 
         ///////////////////////////////////////////////////////////////////////////
         // metamask events listeners
@@ -111,6 +118,7 @@ function App() {
           if (!checkIfNull(accounts[0])) {
             showConnectedAddress(accounts[0]);
             checkTroveExistence();
+            getGasPrice();
           }
           reloadPage();
         });
@@ -118,6 +126,7 @@ function App() {
         ethereum.on("chainChanged", (chainId: string) => {
           checkConnectedChain(chainId);
           checkTroveExistence();
+          getGasPrice();
         });
       }
     }
@@ -128,6 +137,30 @@ function App() {
   ///////////////////////////////////////////////////////////////////////////
   // Satoshi utility methods
   ///////////////////////////////////////////////////////////////////////////
+  
+  async function addTokenInfo(tokenAddr, tokenSymbol, tokenImgUrl){
+    const wasAdded = await window.ethereum.request({
+      method: 'wallet_watchAsset',
+      params: {
+        type: 'ERC20',
+        options: {
+           address: tokenAddr, // The address of the token.
+           symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 characters.
+           decimals: TOKEN_DECIMAL, // The number of decimals in the token.
+           image: tokenImgUrl, // A string URL of the token logo.
+        },
+      },
+    });
+  }
+  
+  async function getGasPrice(){	  	  
+    const _gasPriceHex = await window.ethereum.request({
+      method: "eth_gasPrice",
+    });
+    let _gasPrice = parseInt(_gasPriceHex, 16)
+    console.log("Gas Price=" + _gasPrice);	
+    return _gasPrice;
+  }
 
   function icrToPercentageStr(_icr) {
     return (Number(fromBn(_icr)) * 100).toFixed(2) + "%";
@@ -497,17 +530,30 @@ function App() {
     console.log("accounts=" + accounts);
     showConnectedAddress(accounts[0]);
     await checkTroveExistence();
+    await getGasPrice();
     return accounts[0];
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  // UI listener methods for Trove operations
+  // UI listener methods for peripherals
   ///////////////////////////////////////////////////////////////////////////
 
   function removeAddListener(_element, _event, _func) {
     _element.removeEventListener(_event, _func);
     _element.addEventListener(_event, _func);
   }
+  
+  window.addTokenSATOListener = async function addTokenSATOListener(){
+    await addTokenInfo(contractsAddresses.satoTokenAddr, SATO_SYMBOL, SATO_IMG_URL);
+  } 
+  
+  window.addTokenBTUSDListener = async function addTokenBTUSDListener(){
+    await addTokenInfo(contractsAddresses.btUSDAddr, btUSD_SYMBOL, btUSD_IMG_URL);
+  } 
+
+  ///////////////////////////////////////////////////////////////////////////
+  // UI listener methods for Trove operations
+  ///////////////////////////////////////////////////////////////////////////
 
   window.approveCollListener = async function approveCollListener() {
     const accounts = await window.ethereum.request({
@@ -1122,7 +1168,7 @@ function App() {
   function showConnectedAddress(connectedAddr) {
     const connectWalletButton = document.querySelector("#connectWalletBtn");
     connectWalletButton.textContent = formatAddress(connectedAddr);
-    console.log("Connected as " + connectedAddr);
+    console.log("Connected as " + connectedAddr);  
 
     ///////////////////////////////////////////////////////////////////////////
     // bind UI listeners for Trove operations
@@ -1321,6 +1367,13 @@ function App() {
       "click",
       window.claimLPRewardListener
     );
+	
+	const _addSATOTokenBtn = document.querySelector("#addSatoTokenBtn");
+	removeAddListener(_addSATOTokenBtn, "click", window.addTokenSATOListener);
+	
+	const _addBTUSDTokenBtn = document.querySelector("#addBTUSDTokenBtn");
+	removeAddListener(_addBTUSDTokenBtn, "click", window.addTokenBTUSDListener);
+	
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1483,8 +1536,9 @@ function App() {
     }
   }
 
-  async function prepareTxParams() {
-    return { gasPrice: 1 * 10e9, gasLimit: 3000000 };
+  async function prepareTxParams() {	  
+    let _gasPrice = await getGasPrice();
+    return { gasPrice: _gasPrice, gasLimit: 3000000 };
   }
 
   /////////////////////////////////////////////////
@@ -2368,7 +2422,7 @@ function App() {
               <div className="card" style={{ border: "none" }}>
                 <div className="card-body">
                   <h5 className="card-title">
-                    Total Debt<img src="/btUSD.png"></img>
+                    Total Debt<img src="/btUSD.png" id="addBTUSDTokenBtn"></img>
                   </h5>
                   <p className="card-text" id="statsTotalDebt"></p>
                 </div>
@@ -2406,7 +2460,7 @@ function App() {
                     data-tip="Deposit in Stability Pool will earn SATO issuance & liquidated collateral"
                     data-for="totalSPDepositTip"
                   >
-                    Total Stability Pool Deposit<img src="/btUSD.png"></img>
+                    Total Stability Pool Deposit <i class="bi bi-award-fill"></i>
                   </h5>
                   <p className="card-text" id="statsTotalSPDeposit"></p>
                 </div>
@@ -2417,10 +2471,10 @@ function App() {
                 <div className="card-body">
                   <h5
                     className="card-title"
-                    data-tip="Staked SATO will earn protocol fee in borrowing and redemption"
+                    data-tip="Staked SATO will earn protocol fee in minting and redemption"
                     data-for="totalSATOStakedTip"
                   >
-                    Total SATO Staked <img src="/SATO.png"></img>
+                    Total SATO Staked <img src="/SATO.png" id="addSatoTokenBtn"></img>
                   </h5>
                   <p className="card-text" id="statsTotalSATOStaked"></p>
                 </div>
@@ -3175,7 +3229,7 @@ function App() {
                 data-tip="Redemption fee earned will increase when redemption happens"
                 data-for="redemptionEarnedFeeTip"
               ></input>
-              Earned Borrowing Fee<img src="/btUSD.png"></img>
+              Earned Mint Fee<img src="/btUSD.png"></img>
               <input
                 id="borrowingEarnedInput"
                 type="text"
