@@ -27,11 +27,11 @@ function App() {
   const STAKING_PREMIUM = utils.parseEther("1024");
   const SP_SATO_REWARD_CAP = utils.parseEther("32000000");
   const SP_SATO_REWARD_PER_SECOND = utils.parseUnits("999998681227695000", 0);
-	
-  const SATO_SYMBOL = 'SATO';
-  const SATO_IMG_URL = 'https://www.satofi.app/SATO.png';
-  const btUSD_SYMBOL = 'btUSD';
-  const btUSD_IMG_URL = 'https://www.satofi.app/btUSD.png';
+
+  const SATO_SYMBOL = "SATO";
+  const SATO_IMG_URL = "https://www.satofi.app/SATO.png";
+  const btUSD_SYMBOL = "btUSD";
+  const btUSD_IMG_URL = "https://www.satofi.app/btUSD.png";
   const TOKEN_DECIMAL = 18;
 
   /////////////////////////////////////////////////
@@ -137,28 +137,28 @@ function App() {
   ///////////////////////////////////////////////////////////////////////////
   // Satoshi utility methods
   ///////////////////////////////////////////////////////////////////////////
-  
-  async function addTokenInfo(tokenAddr, tokenSymbol, tokenImgUrl){
+
+  async function addTokenInfo(tokenAddr, tokenSymbol, tokenImgUrl) {
     const wasAdded = await window.ethereum.request({
-      method: 'wallet_watchAsset',
+      method: "wallet_watchAsset",
       params: {
-        type: 'ERC20',
+        type: "ERC20",
         options: {
-           address: tokenAddr, // The address of the token.
-           symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 characters.
-           decimals: TOKEN_DECIMAL, // The number of decimals in the token.
-           image: tokenImgUrl, // A string URL of the token logo.
+          address: tokenAddr, // The address of the token.
+          symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 characters.
+          decimals: TOKEN_DECIMAL, // The number of decimals in the token.
+          image: tokenImgUrl, // A string URL of the token logo.
         },
       },
     });
   }
-  
-  async function getGasPrice(){	  	  
+
+  async function getGasPrice() {
     const _gasPriceHex = await window.ethereum.request({
       method: "eth_gasPrice",
     });
-    let _gasPrice = parseInt(_gasPriceHex, 16)
-    console.log("Gas Price=" + _gasPrice);	
+    let _gasPrice = parseInt(_gasPriceHex, 16);
+    console.log("Gas Price=" + _gasPrice);
     return _gasPrice;
   }
 
@@ -188,7 +188,7 @@ function App() {
     _collChange,
     _isCollIncrease,
     _debtChange,
-    _isDebtIncrease
+    _isDebtIncrease,
   ) {
     if (_collChange.eq(zeroBN) && _debtChange.eq(zeroBN)) {
       //return false
@@ -209,7 +209,7 @@ function App() {
     _isCollIncrease,
     _debtChange,
     _isDebtIncrease,
-    _price
+    _price,
   ) {
     let _newColl = _coll;
     if (_isCollIncrease) {
@@ -257,37 +257,36 @@ function App() {
       const _satoTokenContract = getSATOTokenSignerContract();
       let _collPrice = utils.parseUnits(
         (await _priceFeedContract.callStatic.fetchPrice()).toString(),
-        0
+        0,
       );
 
       ////	Global Stats initialization
       let _troveSystemStatus = await getSystemStatusCall(
         _collPrice,
         _troveManagerContract,
-        _activePoolContract
+        _activePoolContract,
       );
       let _systemTotalDebt = _troveSystemStatus["totalDebt"].sub(
-        _troveSystemStatus["redeemedDebt"]
+        _troveSystemStatus["redeemedDebt"],
       );
       document.querySelector("#statsTotalTrove").textContent =
         _troveSystemStatus["troveCount"];
       document.querySelector("#statsSystemTCR").textContent =
         icrToPercentageStr(_troveSystemStatus["TCR"]);
       document.querySelector("#statsTotalCollateral").textContent = fromBn(
-        _troveSystemStatus["totalColl"]
+        _troveSystemStatus["totalColl"],
       );
       document.querySelector("#statsTotalDebt").textContent =
         fromBn(_systemTotalDebt);
       document.querySelector("#statsCollateralPrice").textContent =
         "$" + fromBn(_collPrice);
-      let _satoStakingStatus = await getSatoStakingStatusCall(
-        _satoStakingContract
-      );
+      let _satoStakingStatus =
+        await getSatoStakingStatusCall(_satoStakingContract);
       document.querySelector("#statsTotalSATOStaked").textContent = fromBn(
-        _satoStakingStatus["totalStaked"]
+        _satoStakingStatus["totalStaked"],
       );
       let _stabilityPoolStatus = await getStabilityPoolStatusCall(
-        _stabilityPoolContract
+        _stabilityPoolContract,
       );
       let _spTotalDeposit = _stabilityPoolStatus["totalDeposit"];
       let _spTotalDepositPercentage = _spTotalDeposit
@@ -299,10 +298,10 @@ function App() {
         icrToPercentageStr(_spTotalDepositPercentage) +
         " of total supply)";
       let _satoRewardStatus = await getSATORewardStatusCall(
-        _communityIssuanceContract
+        _communityIssuanceContract,
       );
       let _timeElapsed = toBn("" + getNowTime()).sub(
-        _satoRewardStatus["communityIssuanceDeployTime"]
+        _satoRewardStatus["communityIssuanceDeployTime"],
       );
       //let _remainingSATOFromCommunityIssuance = SP_SATO_REWARD_CAP.mul(SP_SATO_REWARD_PER_SECOND.pow(_timeElapsed))
       //document.querySelector('#statsTotalSATOToBeMined').textContent = fromBn(_remainingSATOFromCommunityIssuance)
@@ -310,11 +309,11 @@ function App() {
       //// Trove UI initialization setup
       let _myTroveDebtAndColl = await getEntireDebtAndCollCall(
         _troveManagerContract,
-        connectedAddr
+        connectedAddr,
       );
       let _myCollSurplus = await getCollSurplusBalanceCall(
         _collSurplusPoolContract,
-        connectedAddr
+        connectedAddr,
       );
       let _alreadyHasTrove = _myTroveDebtAndColl["coll"].gt(zeroBN); //check Trove's collateral
       if (_alreadyHasTrove) {
@@ -322,10 +321,10 @@ function App() {
         document.querySelector("#existTroveForm").style["display"] = "block";
 
         document.querySelector("#showTroveColl").value = fromBn(
-          _myTroveDebtAndColl["coll"]
+          _myTroveDebtAndColl["coll"],
         );
         document.querySelector("#showTroveDebt").value = fromBn(
-          _myTroveDebtAndColl["debt"]
+          _myTroveDebtAndColl["debt"],
         );
 
         if (_myTroveDebtAndColl["debt"].gt(zeroBN)) {
@@ -343,7 +342,7 @@ function App() {
             ",coll=" +
             _myTroveDebtAndColl["coll"] +
             ",freeDebt=" +
-            _myTroveDebtAndColl["freeDebt"]
+            _myTroveDebtAndColl["freeDebt"],
         );
         if (_myCollSurplus.gt(zeroBN)) {
           document.querySelector("#claimCollSurplusAdjustTroveBtn").style[
@@ -361,7 +360,7 @@ function App() {
         let _needToApprove = await checkOpenTroveCollApproval(
           connectedAddr,
           _collateralTokenContract,
-          _collPrice
+          _collPrice,
         );
         showApproveOpenTroveBtn(_needToApprove[0], connectedAddr);
         if (_myCollSurplus.gt(zeroBN)) {
@@ -379,22 +378,22 @@ function App() {
       let _btUSDBalance = await _btUSDContract.balanceOf(connectedAddr);
       let _existSPDepoist = await getStabilityPoolDepositCall(
         _stabilityPoolContract,
-        connectedAddr
+        connectedAddr,
       );
       console.log(
         connectedAddr +
           " got StabilityPool deposit=" +
-          JSON.stringify(_existSPDepoist)
+          JSON.stringify(_existSPDepoist),
       );
       if (_existSPDepoist["deposit"].gt(zeroBN)) {
         document.querySelector("#spDepositedInput").value = fromBn(
-          _existSPDepoist["deposit"]
+          _existSPDepoist["deposit"],
         );
         document.querySelector("#satoEarnedInput").value = fromBn(
-          _existSPDepoist["satoGain"]
+          _existSPDepoist["satoGain"],
         );
         document.querySelector("#collEarnedInput").value = fromBn(
-          _existSPDepoist["collGain"]
+          _existSPDepoist["collGain"],
         );
         document.querySelector("#withdrawRequestSPBtn").disabled = false;
         document.querySelector("#withdrawRequestSPBtn").style["display"] =
@@ -432,12 +431,12 @@ function App() {
       let _mySATOBalance = await _satoTokenContract.balanceOf(connectedAddr);
       let _existStakingPremium = await getSatoStakingPremiumCall(
         _satoStakingContract,
-        connectedAddr
+        connectedAddr,
       );
       console.log(
         connectedAddr +
           " got SATO Staking premium=" +
-          JSON.stringify(_existStakingPremium)
+          JSON.stringify(_existStakingPremium),
       );
       if (_existStakingPremium["premium"]) {
         document.querySelector("#satoPremiumBtn").style["display"] = "none";
@@ -450,16 +449,16 @@ function App() {
       }
       if (_existStakingPremium["stake"].gt(zeroBN)) {
         document.querySelector("#satoStakedInput").value = fromBn(
-          _existStakingPremium["stake"]
+          _existStakingPremium["stake"],
         );
         document.querySelector("#redemptionEarnedInput").value = fromBn(
-          _existStakingPremium["collGain"]
+          _existStakingPremium["collGain"],
         );
         document.querySelector("#borrowingEarnedInput").value = fromBn(
-          _existStakingPremium["debtGain"]
+          _existStakingPremium["debtGain"],
         );
         let _maxToUnstake = _existStakingPremium["stake"].sub(
-          _existStakingPremium["premium"] ? STAKING_PREMIUM : zeroBN
+          _existStakingPremium["premium"] ? STAKING_PREMIUM : zeroBN,
         );
         document.querySelector("#satoUnstakeBtn").style["display"] =
           "inline-block";
@@ -481,7 +480,7 @@ function App() {
       //// LP Mining UI initialization setup
       let _stakeLPNeedToApprove = await checkStakeLPApproval(
         connectedAddr,
-        _lpTokenContract
+        _lpTokenContract,
       );
       if (_stakeLPNeedToApprove.gt(zeroBN)) {
         document.querySelector("#approveStakeLPBtn").style["display"] =
@@ -491,7 +490,7 @@ function App() {
       }
       let _stakeLPEarning = await getLPRewardCall(
         connectedAddr,
-        _uniPoolContract
+        _uniPoolContract,
       );
       if (_stakeLPEarning.gt(zeroBN)) {
         document.querySelector("#claimLPRewardBtn").style["display"] =
@@ -508,7 +507,7 @@ function App() {
     console.log(
       (_chainConnected ? "Connected" : "DisConnected") +
         " to chainid=" +
-        _chainId
+        _chainId,
     );
 
     let _correctChain = true;
@@ -542,14 +541,22 @@ function App() {
     _element.removeEventListener(_event, _func);
     _element.addEventListener(_event, _func);
   }
-  
-  window.addTokenSATOListener = async function addTokenSATOListener(){
-    await addTokenInfo(contractsAddresses.satoTokenAddr, SATO_SYMBOL, SATO_IMG_URL);
-  } 
-  
-  window.addTokenBTUSDListener = async function addTokenBTUSDListener(){
-    await addTokenInfo(contractsAddresses.btUSDAddr, btUSD_SYMBOL, btUSD_IMG_URL);
-  } 
+
+  window.addTokenSATOListener = async function addTokenSATOListener() {
+    await addTokenInfo(
+      contractsAddresses.satoTokenAddr,
+      SATO_SYMBOL,
+      SATO_IMG_URL,
+    );
+  };
+
+  window.addTokenBTUSDListener = async function addTokenBTUSDListener() {
+    await addTokenInfo(
+      contractsAddresses.btUSDAddr,
+      btUSD_SYMBOL,
+      btUSD_IMG_URL,
+    );
+  };
 
   ///////////////////////////////////////////////////////////////////////////
   // UI listener methods for Trove operations
@@ -565,18 +572,18 @@ function App() {
     const priceFeedContract = getPriceFeedSignerContract();
     let _collPrice = utils.parseUnits(
       (await priceFeedContract.callStatic.fetchPrice()).toString(),
-      0
+      0,
     );
 
     let _needToApproveAndColl = await checkOpenTroveCollApproval(
       connectedAddr,
       collateralContract,
-      _collPrice
+      _collPrice,
     );
     let _approveSuccess = await approveTokenSpender(
       collateralContract,
       contractsAddresses.borrowerOperationsAddr,
-      decimal1Billion.add(_needToApproveAndColl[0])
+      decimal1Billion.add(_needToApproveAndColl[0]),
     );
     if (_approveSuccess) {
       document.querySelector("#approveCollBtn").style["display"] = "none";
@@ -593,7 +600,7 @@ function App() {
     let _approveSuccess = await approveTokenSpender(
       btUSDContract,
       contractsAddresses.borrowerOperationsAddr,
-      decimal1Billion
+      decimal1Billion,
     );
     if (_approveSuccess) {
       document.querySelector("#approveDebtCloseBtn").style["display"] = "none";
@@ -611,7 +618,7 @@ function App() {
       let _approveSuccess = await approveTokenSpender(
         btUSDContract,
         contractsAddresses.borrowerOperationsAddr,
-        decimal1Billion
+        decimal1Billion,
       );
       if (_approveSuccess) {
         document.querySelector("#approveDebtAdjustBtn").style["display"] =
@@ -630,13 +637,13 @@ function App() {
       const priceFeedContract = getPriceFeedSignerContract();
       let _collPrice = utils.parseUnits(
         (await priceFeedContract.callStatic.fetchPrice()).toString(),
-        0
+        0,
       );
 
       await checkOpenTroveDebtInputOnChange(
         connectedAddr,
         collateralContract,
-        _collPrice
+        _collPrice,
       );
     };
 
@@ -653,7 +660,7 @@ function App() {
       troveManagerContract,
       _troveCollAndDebt[0],
       _troveCollAndDebt[1],
-      _troveCollAndDebt[2]
+      _troveCollAndDebt[2],
     );
   };
 
@@ -669,7 +676,7 @@ function App() {
     let _openTroveSuccess = await openTroveCall(
       borrowerOperationsContract,
       _troveCollAndDebt[0],
-      _troveCollAndDebt[1]
+      _troveCollAndDebt[1],
     );
     if (_openTroveSuccess) {
       reloadPage();
@@ -686,12 +693,12 @@ function App() {
     const btUSDContract = getBTUSDSignerContract();
     let _troveCollAndDebt = await getEntireDebtAndCollCall(
       troveManagerContract,
-      connectedAddr
+      connectedAddr,
     );
     let _debtToApprove = await checkRepayDebtApproval(
       connectedAddr,
       _troveCollAndDebt["debt"],
-      btUSDContract
+      btUSDContract,
     );
     if (_debtToApprove.gt(zeroBN)) {
       document.querySelector("#approveDebtCloseBtn").style["display"] =
@@ -700,10 +707,10 @@ function App() {
       document.querySelector("#approveDebtCloseBtn").style["display"] = "none";
     }
     document.querySelector("#closeTroveSummaryColl").textContent = fromBn(
-      _troveCollAndDebt["coll"]
+      _troveCollAndDebt["coll"],
     );
     document.querySelector("#closeTroveSummaryDebt").textContent = fromBn(
-      _troveCollAndDebt["debt"]
+      _troveCollAndDebt["debt"],
     );
   };
 
@@ -730,12 +737,12 @@ function App() {
     const btUSDContract = getBTUSDSignerContract();
     let _troveCollAndDebt = await getEntireDebtAndCollCall(
       troveManagerContract,
-      connectedAddr
+      connectedAddr,
     );
     let _debtToApprove = await checkRepayDebtApproval(
       connectedAddr,
       _troveCollAndDebt["debt"],
-      btUSDContract
+      btUSDContract,
     );
     if (_debtToApprove.gt(zeroBN)) {
       document.querySelector("#approveDebtAdjustBtn").style["display"] =
@@ -744,16 +751,16 @@ function App() {
       document.querySelector("#approveDebtAdjustBtn").style["display"] = "none";
     }
     document.querySelector("#adjustTroveSummaryColl").textContent = fromBn(
-      _troveCollAndDebt["coll"]
+      _troveCollAndDebt["coll"],
     );
     document.querySelector("#adjustTroveSummaryDebt").textContent = fromBn(
-      _troveCollAndDebt["debt"]
+      _troveCollAndDebt["debt"],
     );
 
     const priceFeedContract = getPriceFeedSignerContract();
     let price = utils.parseUnits(
       (await priceFeedContract.callStatic.fetchPrice()).toString(),
-      0
+      0,
     );
     if (_troveCollAndDebt["debt"].gt(zeroBN)) {
       let _icr = _troveCollAndDebt["coll"]
@@ -773,13 +780,13 @@ function App() {
     const troveManagerContract = getTroveManagerSignerContract();
     let _troveCollAndDebt = await getEntireDebtAndCollCall(
       troveManagerContract,
-      connectedAddr
+      connectedAddr,
     );
 
     const priceFeedContract = getPriceFeedSignerContract();
     let price = utils.parseUnits(
       (await priceFeedContract.callStatic.fetchPrice()).toString(),
-      0
+      0,
     );
     let _icr = 0;
     if (_troveCollAndDebt["debt"].gt(zeroBN)) {
@@ -794,7 +801,7 @@ function App() {
       _troveCollAndDebt["debt"],
       _troveCollAndDebt["coll"],
       _icr,
-      price
+      price,
     );
   };
 
@@ -808,13 +815,13 @@ function App() {
       const troveManagerContract = getTroveManagerSignerContract();
       let _troveCollAndDebt = await getEntireDebtAndCollCall(
         troveManagerContract,
-        connectedAddr
+        connectedAddr,
       );
 
       const priceFeedContract = getPriceFeedSignerContract();
       let price = utils.parseUnits(
         (await priceFeedContract.callStatic.fetchPrice()).toString(),
-        0
+        0,
       );
       let _icr = _troveCollAndDebt["coll"]
         .mul(price)
@@ -826,7 +833,7 @@ function App() {
         _troveCollAndDebt["debt"],
         _troveCollAndDebt["coll"],
         _icr,
-        price
+        price,
       );
       if (_adjustCheckAndParams["checkAdjustValid"]) {
         const borrowerOperationsContract =
@@ -836,7 +843,7 @@ function App() {
           _adjustCheckAndParams["finalAdjust"]["collChange"],
           _adjustCheckAndParams["finalAdjust"]["collIncrease"],
           _adjustCheckAndParams["finalAdjust"]["debtChange"],
-          _adjustCheckAndParams["finalAdjust"]["debtIncrease"]
+          _adjustCheckAndParams["finalAdjust"]["debtIncrease"],
         );
         if (_adjustTroveSuccess) {
           reloadPage();
@@ -853,7 +860,7 @@ function App() {
     const borrowerOperationsContract = getBorrowerOperationsSignerContract();
     let _claimCollSurplusSuccess = await claimCollSurplusCall(
       connectedAddr,
-      borrowerOperationsContract
+      borrowerOperationsContract,
     );
     if (_claimCollSurplusSuccess) {
       reloadPage();
@@ -872,13 +879,13 @@ function App() {
 
     const stabilityPoolContract = getStabilityPoolSignerContract();
     let _depositAmt = inputValToBN(
-      document.querySelector("#btUSDSPInput").value
+      document.querySelector("#btUSDSPInput").value,
     );
     if (_depositAmt.gt(zeroBN)) {
       let _depositSuccess = await depositSPCall(
         connectedAddr,
         stabilityPoolContract,
-        _depositAmt
+        _depositAmt,
       );
       if (_depositSuccess) {
         reloadPage();
@@ -898,7 +905,7 @@ function App() {
     let _claimSPSuccess = await withdrawSPCall(
       connectedAddr,
       stabilityPoolContract,
-      zeroBN
+      zeroBN,
     );
     if (_claimSPSuccess) {
       reloadPage();
@@ -914,12 +921,12 @@ function App() {
 
       const stabilityPoolContract = getStabilityPoolSignerContract();
       let _amtToWithdraw = toBn(
-        document.querySelector("#withdrawSPSummaryAmount").textContent
+        document.querySelector("#withdrawSPSummaryAmount").textContent,
       );
       let _withdrawSPSuccess = await withdrawSPCall(
         connectedAddr,
         stabilityPoolContract,
-        _amtToWithdraw
+        _amtToWithdraw,
       );
       if (_withdrawSPSuccess) {
         reloadPage();
@@ -935,10 +942,10 @@ function App() {
 
       const stabilityPoolContract = getStabilityPoolSignerContract();
       let _maxAmtToWithdraw = toBn(
-        document.querySelector("#spDepositedInput").value
+        document.querySelector("#spDepositedInput").value,
       );
       let _withdrawReqAmt = inputValToBN(
-        document.querySelector("#btUSDSPInput").value
+        document.querySelector("#btUSDSPInput").value,
       );
       if (
         _withdrawReqAmt.gt(zeroBN) &&
@@ -947,14 +954,14 @@ function App() {
         let _withdrawReqSPSuccess = await withdrawRequestSPCall(
           connectedAddr,
           stabilityPoolContract,
-          _withdrawReqAmt
+          _withdrawReqAmt,
         );
         if (_withdrawReqSPSuccess) {
           reloadPage();
         }
       } else {
         showToastMessage(
-          "Withdraw request should be above zero and below deposited amount"
+          "Withdraw request should be above zero and below deposited amount",
         );
       }
     };
@@ -968,17 +975,17 @@ function App() {
     const _stabilityPoolContract = getStabilityPoolSignerContract();
     let _existSPDepoist = await getStabilityPoolDepositCall(
       _stabilityPoolContract,
-      connectedAddr
+      connectedAddr,
     );
     if (_existSPDepoist["withdrawReq"].gt(zeroBN)) {
       document.querySelector("#withdrawSPSummaryAmount").textContent = fromBn(
-        _existSPDepoist["withdrawReq"]
+        _existSPDepoist["withdrawReq"],
       );
       let _now = getNowTime();
       let _reqTime = _existSPDepoist["withdrawReqTime"].toNumber();
       let _diffTime = _now - _reqTime;
       console.log(
-        "_now=" + _now + ",reqTime=" + _reqTime + ",_diffTime=" + _diffTime
+        "_now=" + _now + ",reqTime=" + _reqTime + ",_diffTime=" + _diffTime,
       );
       document.querySelector("#withdrawSPSummarySeconds").textContent =
         "" + _diffTime;
@@ -1004,7 +1011,7 @@ function App() {
     let _claimStakingSuccess = await unstakeSatoCall(
       connectedAddr,
       satoStakingContract,
-      zeroBN
+      zeroBN,
     );
     if (_claimStakingSuccess) {
       reloadPage();
@@ -1019,13 +1026,13 @@ function App() {
 
     const satoStakingContract = getSatoStakingSignerContract();
     let _stakeAmt = inputValToBN(
-      document.querySelector("#satoStakeInput").value
+      document.querySelector("#satoStakeInput").value,
     );
     if (_stakeAmt.gt(zeroBN)) {
       let _stakeStakingSuccess = await stakeSatoCall(
         connectedAddr,
         satoStakingContract,
-        _stakeAmt
+        _stakeAmt,
       );
       if (_stakeStakingSuccess) {
         reloadPage();
@@ -1043,12 +1050,12 @@ function App() {
 
     const satoStakingContract = getSatoStakingSignerContract();
     let _unstakeAmt = inputValToBN(
-      document.querySelector("#satoStakeInput").value
+      document.querySelector("#satoStakeInput").value,
     );
     let _unstakeStakingSuccess = await unstakeSatoCall(
       connectedAddr,
       satoStakingContract,
-      _unstakeAmt
+      _unstakeAmt,
     );
     if (_unstakeStakingSuccess) {
       reloadPage();
@@ -1064,7 +1071,7 @@ function App() {
     const satoStakingContract = getSatoStakingSignerContract();
     let _premiumStakingSuccess = await premiumStakingCall(
       connectedAddr,
-      satoStakingContract
+      satoStakingContract,
     );
     if (_premiumStakingSuccess) {
       reloadPage();
@@ -1085,7 +1092,7 @@ function App() {
     let _approveSuccess = await approveTokenSpender(
       lpTokenContract,
       contractsAddresses.uniPoolAddr,
-      decimal1Billion
+      decimal1Billion,
     );
     if (_approveSuccess) {
       document.querySelector("#approveStakeLPBtn").style["display"] = "none";
@@ -1101,7 +1108,7 @@ function App() {
     const uniPoolContract = getUniPoolSignerContract();
     let _claimLPRewardSuccess = await claimLPRewardCall(
       connectedAddr,
-      uniPoolContract
+      uniPoolContract,
     );
     if (_claimLPRewardSuccess) {
       reloadPage();
@@ -1121,7 +1128,7 @@ function App() {
       let _stakeLPSuccess = await stakeLPCall(
         connectedAddr,
         uniPoolContract,
-        _stakeAmt
+        _stakeAmt,
       );
       if (_stakeLPSuccess) {
         reloadPage();
@@ -1140,7 +1147,7 @@ function App() {
     const uniPoolContract = getUniPoolSignerContract();
     let _withdrawLPSuccess = await withdrawLPCall(
       connectedAddr,
-      uniPoolContract
+      uniPoolContract,
     );
     if (_withdrawLPSuccess) {
       reloadPage();
@@ -1168,7 +1175,7 @@ function App() {
   function showConnectedAddress(connectedAddr) {
     const connectWalletButton = document.querySelector("#connectWalletBtn");
     connectWalletButton.textContent = formatAddress(connectedAddr);
-    console.log("Connected as " + connectedAddr);  
+    console.log("Connected as " + connectedAddr);
 
     ///////////////////////////////////////////////////////////////////////////
     // bind UI listeners for Trove operations
@@ -1180,18 +1187,18 @@ function App() {
     removeAddListener(
       _openTroveDebtIpt,
       "change",
-      window.checkOpenTroveDebtOnChange
+      window.checkOpenTroveDebtOnChange,
     );
     removeAddListener(
       _openTroveDebtIpt,
       "input",
-      window.checkOpenTroveDebtOnChange
+      window.checkOpenTroveDebtOnChange,
     );
     const _openTroveModal = document.querySelector("#openTroveConfirmModal");
     removeAddListener(
       _openTroveModal,
       "show.bs.modal",
-      window.openTroveModalListener
+      window.openTroveModalListener,
     );
     const _openTroveConfirmBtn = document.querySelector("#openTroveBtn");
     removeAddListener(_openTroveConfirmBtn, "click", window.openTroveListener);
@@ -1199,101 +1206,101 @@ function App() {
     removeAddListener(
       _closeTroveModal,
       "show.bs.modal",
-      window.closeTroveModalListener
+      window.closeTroveModalListener,
     );
     const _approveDebtCloseButton = document.querySelector(
-      "#approveDebtCloseBtn"
+      "#approveDebtCloseBtn",
     );
     removeAddListener(
       _approveDebtCloseButton,
       "click",
-      window.approveDebtCloseListener
+      window.approveDebtCloseListener,
     );
     const _closeTroveConfirmBtn = document.querySelector("#closeTroveBtn");
     removeAddListener(
       _closeTroveConfirmBtn,
       "click",
-      window.closeTroveListener
+      window.closeTroveListener,
     );
     const _adjustTroveModal = document.querySelector(
-      "#adjustTroveConfirmModal"
+      "#adjustTroveConfirmModal",
     );
     removeAddListener(
       _adjustTroveModal,
       "show.bs.modal",
-      window.adjustTroveModalListener
+      window.adjustTroveModalListener,
     );
     const _adjustTroveCollIpt = document.querySelector(
-      "#adjustTroveCollChange"
+      "#adjustTroveCollChange",
     );
     removeAddListener(
       _adjustTroveCollIpt,
       "change",
-      window.adjustTroveInputListener
+      window.adjustTroveInputListener,
     );
     removeAddListener(
       _adjustTroveCollIpt,
       "input",
-      window.adjustTroveInputListener
+      window.adjustTroveInputListener,
     );
     const _adjustTroveCollIncreaseSwitch = document.querySelector(
-      "#adjustTroveAddCollSwitch"
+      "#adjustTroveAddCollSwitch",
     );
     removeAddListener(
       _adjustTroveCollIncreaseSwitch,
       "click",
-      window.adjustTroveInputListener
+      window.adjustTroveInputListener,
     );
     const _adjustTroveDebtIpt = document.querySelector(
-      "#adjustTroveDebtChange"
+      "#adjustTroveDebtChange",
     );
     removeAddListener(
       _adjustTroveDebtIpt,
       "change",
-      window.adjustTroveInputListener
+      window.adjustTroveInputListener,
     );
     removeAddListener(
       _adjustTroveDebtIpt,
       "input",
-      window.adjustTroveInputListener
+      window.adjustTroveInputListener,
     );
     const _approveDebtAdjustButton = document.querySelector(
-      "#approveDebtAdjustBtn"
+      "#approveDebtAdjustBtn",
     );
     removeAddListener(
       _approveDebtAdjustButton,
       "click",
-      window.approveDebtAdjustListener
+      window.approveDebtAdjustListener,
     );
     const _adjustTroveDebtIncreaseSwitch = document.querySelector(
-      "#adjustTroveAddDebtSwitch"
+      "#adjustTroveAddDebtSwitch",
     );
     removeAddListener(
       _adjustTroveDebtIncreaseSwitch,
       "click",
-      window.adjustTroveInputListener
+      window.adjustTroveInputListener,
     );
     const _adjustTroveConfirmBtn = document.querySelector("#adjustTroveBtn");
     removeAddListener(
       _adjustTroveConfirmBtn,
       "click",
-      window.adjustTroveConfirmListener
+      window.adjustTroveConfirmListener,
     );
     const _claimCollSurplusOpenTroveBtn = document.querySelector(
-      "#claimCollSurplusOpenTroveBtn"
+      "#claimCollSurplusOpenTroveBtn",
     );
     removeAddListener(
       _claimCollSurplusOpenTroveBtn,
       "click",
-      window.claimCollSurplusListener
+      window.claimCollSurplusListener,
     );
     const _claimCollSurplusAdjustTroveBtn = document.querySelector(
-      "#claimCollSurplusAdjustTroveBtn"
+      "#claimCollSurplusAdjustTroveBtn",
     );
     removeAddListener(
       _claimCollSurplusAdjustTroveBtn,
       "click",
-      window.claimCollSurplusListener
+      window.claimCollSurplusListener,
     );
 
     ///////////////////////////////////////////////////////////////////////////
@@ -1305,26 +1312,26 @@ function App() {
     const _claimSPButton = document.querySelector("#claimSPBtn");
     removeAddListener(_claimSPButton, "click", window.claimSPListener);
     const _withdrawSPRequestButton = document.querySelector(
-      "#withdrawRequestSPBtn"
+      "#withdrawRequestSPBtn",
     );
     removeAddListener(
       _withdrawSPRequestButton,
       "click",
-      window.withdrawRequestSPListener
+      window.withdrawRequestSPListener,
     );
     const _withdrawSPConfrmModal = document.querySelector(
-      "#withdrawSPConfirmModal"
+      "#withdrawSPConfirmModal",
     );
     removeAddListener(
       _withdrawSPConfrmModal,
       "show.bs.modal",
-      window.withdrawSPModalListener
+      window.withdrawSPModalListener,
     );
     const _withdrawSPConfirmButton = document.querySelector("#withdrawSPBtn");
     removeAddListener(
       _withdrawSPConfirmButton,
       "click",
-      window.withdrawSPConfirmListener
+      window.withdrawSPConfirmListener,
     );
 
     ///////////////////////////////////////////////////////////////////////////
@@ -1339,13 +1346,13 @@ function App() {
     removeAddListener(
       _claimStakingButton,
       "click",
-      window.claimStakingListener
+      window.claimStakingListener,
     );
     const _goPremiumStakingButton = document.querySelector("#satoPremiumBtn");
     removeAddListener(
       _goPremiumStakingButton,
       "click",
-      window.premiumStakingListener
+      window.premiumStakingListener,
     );
 
     ///////////////////////////////////////////////////////////////////////////
@@ -1355,7 +1362,7 @@ function App() {
     removeAddListener(
       _approveStakeLPButton,
       "click",
-      window.approveStakeLPListener
+      window.approveStakeLPListener,
     );
     const _stakeLPButton = document.querySelector("#stakeLPBtn");
     removeAddListener(_stakeLPButton, "click", window.stakeLPListener);
@@ -1365,15 +1372,14 @@ function App() {
     removeAddListener(
       _claimLPRewardButton,
       "click",
-      window.claimLPRewardListener
+      window.claimLPRewardListener,
     );
-	
-	const _addSATOTokenBtn = document.querySelector("#addSatoTokenBtn");
-	removeAddListener(_addSATOTokenBtn, "click", window.addTokenSATOListener);
-	
-	const _addBTUSDTokenBtn = document.querySelector("#addBTUSDTokenBtn");
-	removeAddListener(_addBTUSDTokenBtn, "click", window.addTokenBTUSDListener);
-	
+
+    const _addSATOTokenBtn = document.querySelector("#addSatoTokenBtn");
+    removeAddListener(_addSATOTokenBtn, "click", window.addTokenSATOListener);
+
+    const _addBTUSDTokenBtn = document.querySelector("#addBTUSDTokenBtn");
+    removeAddListener(_addBTUSDTokenBtn, "click", window.addTokenBTUSDListener);
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1390,10 +1396,10 @@ function App() {
       (
         await lpTokenContract.allowance(
           _myAddress,
-          contractsAddresses.uniPoolAddr
+          contractsAddresses.uniPoolAddr,
         )
       ).toString(),
-      0
+      0,
     );
     let _lpBal = await lpTokenContract.balanceOf(_myAddress);
     let _needToApprove =
@@ -1405,7 +1411,7 @@ function App() {
         " has LP allowance to UniPool=" +
         _approvedBal +
         ",lpToStake=" +
-        _lpBal
+        _lpBal,
     );
     return _needToApprove;
   }
@@ -1413,16 +1419,16 @@ function App() {
   async function checkRepayDebtApproval(
     _myAddress,
     debtToRepay,
-    btUSDContract
+    btUSDContract,
   ) {
     let _approvedBal = utils.parseUnits(
       (
         await btUSDContract.allowance(
           _myAddress,
-          contractsAddresses.borrowerOperationsAddr
+          contractsAddresses.borrowerOperationsAddr,
         )
       ).toString(),
-      0
+      0,
     );
     let _needToApprove = _approvedBal.lt(debtToRepay)
       ? debtToRepay.sub(_approvedBal).add(decimal1Billion)
@@ -1432,7 +1438,7 @@ function App() {
         " has debt allowance to BorrowerOperations=" +
         _approvedBal +
         ",debtToRepay=" +
-        debtToRepay
+        debtToRepay,
     );
     return _needToApprove;
   }
@@ -1440,16 +1446,16 @@ function App() {
   async function checkOpenTroveCollApproval(
     _myAddress,
     collateralContract,
-    _collPrice
+    _collPrice,
   ) {
     let _approvedBal = utils.parseUnits(
       (
         await collateralContract.allowance(
           _myAddress,
-          contractsAddresses.borrowerOperationsAddr
+          contractsAddresses.borrowerOperationsAddr,
         )
       ).toString(),
-      0
+      0,
     );
     let _wantDebtAmount = document.querySelector("#openTroveDebtInput").value;
     let _troveDebtAmt = checkIfNull(_wantDebtAmount)
@@ -1468,7 +1474,7 @@ function App() {
         ",_troveDebtAmt=" +
         _troveDebtAmt +
         ",_troveCollAmt=" +
-        _troveCollAmt
+        _troveCollAmt,
     );
     return [_needToApprove, _troveCollAmt, _troveDebtAmt];
   }
@@ -1476,12 +1482,12 @@ function App() {
   async function checkOpenTroveDebtInputOnChange(
     _myAddress,
     collateralContract,
-    _collPrice
+    _collPrice,
   ) {
     let _needToApproveAndColl = await checkOpenTroveCollApproval(
       _myAddress,
       collateralContract,
-      _collPrice
+      _collPrice,
     );
     let _requiredColl = _needToApproveAndColl[1];
     let _needToApprove = _needToApproveAndColl[0];
@@ -1497,7 +1503,7 @@ function App() {
       console.log(
         _myAddress +
           " need to approve collateral to openTrove:" +
-          _needToApprove
+          _needToApprove,
       );
       approveCollBtn.style["display"] = "inline-block";
     } else {
@@ -1522,21 +1528,21 @@ function App() {
       console.log(
         `Transaction confirmed in block ${
           receipt.blockNumber
-        } and Gas used: ${receipt.gasUsed.toString()}`
+        } and Gas used: ${receipt.gasUsed.toString()}`,
       );
       showToastMessage(_action + " Tx Confirmed " + _txExplorer + _tx.hash);
       return true;
     } catch (err) {
       let error = JSON.parse(JSON.stringify(err));
       console.log(
-        "Transaction " + _txExplorer + _tx.hash + " errored: " + error
+        "Transaction " + _txExplorer + _tx.hash + " errored: " + error,
       );
       showToastMessage(_action + " Tx Errored " + _txExplorer + _tx.hash);
       return false;
     }
   }
 
-  async function prepareTxParams() {	  
+  async function prepareTxParams() {
     let _gasPrice = await getGasPrice();
     return { gasPrice: _gasPrice, gasLimit: 3000000 };
   }
@@ -1551,7 +1557,7 @@ function App() {
     return new Contract(
       contractsAddresses.collateralTokenAddr,
       erc20_abi,
-      signer
+      signer,
     );
   }
 
@@ -1579,7 +1585,7 @@ function App() {
     return new Contract(
       contractsAddresses.priceFeedAddr,
       priceFeed_abi,
-      signer
+      signer,
     );
   }
 
@@ -1589,7 +1595,7 @@ function App() {
     return new Contract(
       contractsAddresses.borrowerOperationsAddr,
       borrowerOperations_abi,
-      signer
+      signer,
     );
   }
 
@@ -1599,7 +1605,7 @@ function App() {
     return new Contract(
       contractsAddresses.troveManagerAddr,
       troveManager_abi,
-      signer
+      signer,
     );
   }
 
@@ -1609,7 +1615,7 @@ function App() {
     return new Contract(
       contractsAddresses.activePoolAddr,
       activePool_abi,
-      signer
+      signer,
     );
   }
 
@@ -1619,7 +1625,7 @@ function App() {
     return new Contract(
       contractsAddresses.collSurplusPoolAddr,
       collSurplus_abi,
-      signer
+      signer,
     );
   }
 
@@ -1629,7 +1635,7 @@ function App() {
     return new Contract(
       contractsAddresses.stabilityPoolAddr,
       stabilityPool_abi,
-      signer
+      signer,
     );
   }
 
@@ -1639,7 +1645,7 @@ function App() {
     return new Contract(
       contractsAddresses.satoStakingAddr,
       satoStaking_abi,
-      signer
+      signer,
     );
   }
 
@@ -1649,7 +1655,7 @@ function App() {
     return new Contract(
       contractsAddresses.satoCommunityIssuanceAddr,
       communityIssuance_abi,
-      signer
+      signer,
     );
   }
 
@@ -1668,7 +1674,7 @@ function App() {
     let _appproveTx = await tokenContract.approve(spender, amount, _params);
     let _approveTxSuccess = await waitSubmittedTx(
       _appproveTx,
-      "TOKEN APPROVAL"
+      "TOKEN APPROVAL",
     );
     return _approveTxSuccess;
   }
@@ -1676,7 +1682,7 @@ function App() {
   async function getSystemStatusCall(
     price,
     troveManagerContract,
-    activePoolContract
+    activePoolContract,
   ) {
     let _troveCnt = await troveManagerContract.getTroveOwnersCount();
     let _tcr = await troveManagerContract.getTCR(price);
@@ -1719,13 +1725,13 @@ function App() {
     const troveManagerContract = getTroveManagerSignerContract();
     let _collPrice = utils.parseUnits(
       (await priceFeedContract.callStatic.fetchPrice()).toString(),
-      0
+      0,
     );
 
     let _needToApproveAndColl = await checkOpenTroveCollApproval(
       connectedAddr,
       collateralContract,
-      _collPrice
+      _collPrice,
     );
     let _collInput = document.querySelector("#openTroveCollInput").value;
     if (!checkIfNull(_collInput)) {
@@ -1744,14 +1750,14 @@ function App() {
     troveMgrContract,
     debt,
     coll,
-    price
+    price,
   ) {
     let _inRecoveryMode = await checkRecoveryModeCall(price, troveMgrContract);
     let _borrowingFee = _inRecoveryMode
       ? zeroBN
       : await troveMgrContract.getBorrowingFeeWithDecayForBorrower(
           connectedAddr,
-          debt
+          debt,
         );
     let _totalDebt = debt.add(_borrowingFee);
     let _icr = coll.mul(price).div(_totalDebt);
@@ -1784,20 +1790,20 @@ function App() {
     debt,
     coll,
     icr,
-    price
+    price,
   ) {
     let _inRecoveryMode = await checkRecoveryModeCall(price, troveMgrContract);
     let _collChangeBn = inputValToBN(
-      document.querySelector("#adjustTroveCollChange").value
+      document.querySelector("#adjustTroveCollChange").value,
     );
     let _isCollIncrease = document.querySelector(
-      "#adjustTroveAddCollSwitch"
+      "#adjustTroveAddCollSwitch",
     ).checked;
     let _debtChangeBn = inputValToBN(
-      document.querySelector("#adjustTroveDebtChange").value
+      document.querySelector("#adjustTroveDebtChange").value,
     );
     let _isDebtIncrease = document.querySelector(
-      "#adjustTroveAddDebtSwitch"
+      "#adjustTroveAddDebtSwitch",
     ).checked;
 
     if (_inRecoveryMode && !_isCollIncrease && _collChangeBn.gt(zeroBN)) {
@@ -1812,7 +1818,7 @@ function App() {
         ? zeroBN
         : await troveMgrContract.getBorrowingFeeWithDecayForBorrower(
             connectedAddr,
-            _debtChangeBn
+            _debtChangeBn,
           );
       _totalDebtChange = _debtChangeBn.add(_borrowingFee);
       if (_borrowingFee.gt(zeroBN)) {
@@ -1832,7 +1838,7 @@ function App() {
       _collChangeBn,
       _isCollIncrease,
       _totalDebtChange,
-      _isDebtIncrease
+      _isDebtIncrease,
     );
     if (!_baseCheck) {
       showToastMessage("Adjust should keep trove above minimum Debt");
@@ -1849,14 +1855,14 @@ function App() {
       _isCollIncrease,
       _totalDebtChange,
       _isDebtIncrease,
-      price
+      price,
     );
 
     document.querySelector("#adjustTroveSummaryColl").textContent = fromBn(
-      _newTroveCollAndDebt[0]
+      _newTroveCollAndDebt[0],
     );
     document.querySelector("#adjustTroveSummaryDebt").textContent = fromBn(
-      _newTroveCollAndDebt[1]
+      _newTroveCollAndDebt[1],
     );
     document.querySelector("#adjustTroveSummaryICR").textContent =
       icrToPercentageStr(_newTroveCollAndDebt[2]);
@@ -1865,7 +1871,7 @@ function App() {
     let _systemStatus = await getSystemStatusCall(
       price,
       troveMgrContract,
-      activePoolContract
+      activePoolContract,
     );
     let _newSystemCollAndDebt = getNewCRForAdjustTrove(
       _systemStatus["totalDebt"].sub(_systemStatus["redeemedDebt"]),
@@ -1874,7 +1880,7 @@ function App() {
       _isCollIncrease,
       _totalDebtChange,
       _isDebtIncrease,
-      price
+      price,
     );
 
     let _msg =
@@ -1903,11 +1909,11 @@ function App() {
       _newTroveCollAndDebt[2],
       icr,
       _newSystemCollAndDebt[2],
-      _inRecoveryMode
+      _inRecoveryMode,
     );
     if (!_moreCheck || _newTroveCollAndDebt[1].lt(MIN_DEBT)) {
       showToastMessage(
-        "Adjust should improve the ICR (and TCR) in general and keep trove above minimum debt"
+        "Adjust should improve the ICR (and TCR) in general and keep trove above minimum debt",
       );
       document.querySelector("#adjustTroveBtn").disabled = true;
       return { checkAdjustValid: false, finalAdjust: {} };
@@ -1928,13 +1934,13 @@ function App() {
   async function openTroveCall(borrowerOperationsContract, debt, coll) {
     let _params = await prepareTxParams();
     console.log(
-      "open Trove with debt=" + fromBn(debt) + ",coll=" + fromBn(coll)
+      "open Trove with debt=" + fromBn(debt) + ",coll=" + fromBn(coll),
     );
     let _openTroveTx = await borrowerOperationsContract.openTrove(
       decimal18,
       debt,
       coll,
-      _params
+      _params,
     );
     let _openTroveTxSuccess = await waitSubmittedTx(_openTroveTx, "OPEN TROVE");
     return _openTroveTxSuccess;
@@ -1945,7 +1951,7 @@ function App() {
     _collChange,
     _isCollIncrease,
     _debtChange,
-    _isDebtIncrease
+    _isDebtIncrease,
   ) {
     let _params = await prepareTxParams();
     console.log(
@@ -1956,18 +1962,18 @@ function App() {
         "," +
         (_isCollIncrease ? "add" : "reduce") +
         " coll=" +
-        fromBn(_collChange)
+        fromBn(_collChange),
     );
     let _adjustTroveTx = await borrowerOperationsContract.adjustTrove(
       decimal18,
       _collChange,
       _isCollIncrease,
       _debtChange,
-      _isDebtIncrease
+      _isDebtIncrease,
     );
     let _adjustTroveTxSuccess = await waitSubmittedTx(
       _adjustTroveTx,
-      "ADJUST TROVE"
+      "ADJUST TROVE",
     );
     return _adjustTroveTxSuccess;
   }
@@ -1977,15 +1983,14 @@ function App() {
     let _closeTroveTx = await borrowerOperationsContract.closeTrove(_params);
     let _closeTroveTxSuccess = await waitSubmittedTx(
       _closeTroveTx,
-      "CLOSE TROVE"
+      "CLOSE TROVE",
     );
     return _closeTroveTxSuccess;
   }
 
   async function getEntireDebtAndCollCall(troveManager, myAddress) {
-    let _myEntireDebtAndColl = await troveManager.getEntireDebtAndColl(
-      myAddress
-    );
+    let _myEntireDebtAndColl =
+      await troveManager.getEntireDebtAndColl(myAddress);
     return {
       debt: _myEntireDebtAndColl[0],
       coll: _myEntireDebtAndColl[1],
@@ -2002,7 +2007,7 @@ function App() {
     let _goPremiumTx = await satoStakingContract.goPremiumStaking();
     let _goPremiumTxSuccess = await waitSubmittedTx(
       _goPremiumTx,
-      "PREMIUM STAKING"
+      "PREMIUM STAKING",
     );
     return _goPremiumTxSuccess;
   }
@@ -2018,7 +2023,7 @@ function App() {
   async function unstakeSatoCall(
     connectedAddr,
     satoStakingContract,
-    _unstakeAmt
+    _unstakeAmt,
   ) {
     let _params = await prepareTxParams();
     console.log("unstake from SATOStaking with sato=" + fromBn(_unstakeAmt));
@@ -2030,12 +2035,10 @@ function App() {
   async function getSatoStakingPremiumCall(satoStakingContract, myAddress) {
     let _myStake = await satoStakingContract.stakes(myAddress);
     let _myPremium = await satoStakingContract.ifPremiumStaking(myAddress);
-    let _myStakingCollGain = await satoStakingContract.getPendingETHGain(
-      myAddress
-    );
-    let _myStakingDebtGain = await satoStakingContract.getPendingLUSDGain(
-      myAddress
-    );
+    let _myStakingCollGain =
+      await satoStakingContract.getPendingETHGain(myAddress);
+    let _myStakingDebtGain =
+      await satoStakingContract.getPendingLUSDGain(myAddress);
     return {
       stake: _myStake,
       premium: _myPremium,
@@ -2051,13 +2054,13 @@ function App() {
   async function depositSPCall(
     connectedAddr,
     stabilityPoolContract,
-    _depositAmt
+    _depositAmt,
   ) {
     let _params = await prepareTxParams();
     console.log("deposit into StabilityPool with debt=" + fromBn(_depositAmt));
     let _depositSPTx = await stabilityPoolContract.provideToSP(
       _depositAmt,
-      FRONTEND_TAG
+      FRONTEND_TAG,
     );
     let _depositSPTxSuccess = await waitSubmittedTx(_depositSPTx, "DEPOSIT SP");
     return _depositSPTxSuccess;
@@ -2066,18 +2069,17 @@ function App() {
   async function withdrawSPCall(
     connectedAddr,
     stabilityPoolContract,
-    _withdrawAmt
+    _withdrawAmt,
   ) {
     let _params = await prepareTxParams();
     console.log(
-      "withdraw from StabilityPool with debt=" + fromBn(_withdrawAmt)
+      "withdraw from StabilityPool with debt=" + fromBn(_withdrawAmt),
     );
-    let _withdrawSPTx = await stabilityPoolContract.withdrawFromSP(
-      _withdrawAmt
-    );
+    let _withdrawSPTx =
+      await stabilityPoolContract.withdrawFromSP(_withdrawAmt);
     let _withdrawSPTxSuccess = await waitSubmittedTx(
       _withdrawSPTx,
-      _withdrawAmt.gt(zeroBN) ? "WITHDRAW SP" : "CLAIM EARNING"
+      _withdrawAmt.gt(zeroBN) ? "WITHDRAW SP" : "CLAIM EARNING",
     );
     return _withdrawSPTxSuccess;
   }
@@ -2085,36 +2087,32 @@ function App() {
   async function withdrawRequestSPCall(
     connectedAddr,
     stabilityPoolContract,
-    _withdrawAmt
+    _withdrawAmt,
   ) {
     let _params = await prepareTxParams();
     console.log(
-      "withdraw request to StabilityPool with debt=" + fromBn(_withdrawAmt)
+      "withdraw request to StabilityPool with debt=" + fromBn(_withdrawAmt),
     );
     let _withdrawRequestSPTx =
       await stabilityPoolContract.requestWithdrawFromSP(_withdrawAmt);
     let _withdrawRequestSPTxSuccess = await waitSubmittedTx(
       _withdrawRequestSPTx,
-      "WITHDRAW SP REQUEST"
+      "WITHDRAW SP REQUEST",
     );
     return _withdrawRequestSPTxSuccess;
   }
 
   async function getStabilityPoolDepositCall(stabilityPoolContract, myAddress) {
-    let _myDeposit = await stabilityPoolContract.getCompoundedDebtDeposit(
-      myAddress
-    );
-    let _myDepositSATOGain = await stabilityPoolContract.getDepositorSATOGain(
-      myAddress
-    );
-    let _myDepositCollGain = await stabilityPoolContract.getDepositorETHGain(
-      myAddress
-    );
+    let _myDeposit =
+      await stabilityPoolContract.getCompoundedDebtDeposit(myAddress);
+    let _myDepositSATOGain =
+      await stabilityPoolContract.getDepositorSATOGain(myAddress);
+    let _myDepositCollGain =
+      await stabilityPoolContract.getDepositorETHGain(myAddress);
     let _myWithdrawRequestAmount =
       await stabilityPoolContract.withdrawReqAmount(myAddress);
-    let _myWithdrawRequestTime = await stabilityPoolContract.withdrawReqTime(
-      myAddress
-    );
+    let _myWithdrawRequestTime =
+      await stabilityPoolContract.withdrawReqTime(myAddress);
     return {
       deposit: _myDeposit,
       satoGain: _myDepositSATOGain,
@@ -2135,14 +2133,14 @@ function App() {
 
   async function claimCollSurplusCall(
     connectedAddr,
-    borrowerOperationsContract
+    borrowerOperationsContract,
   ) {
     let _params = await prepareTxParams();
     console.log(connectedAddr + " claim from BorrowerOperations");
     let _claimCollSuplusTx = await borrowerOperationsContract.claimCollateral();
     let _claimCollSuplusTxSuccess = await waitSubmittedTx(
       _claimCollSuplusTx,
-      "CLAIM COLLATERAL SURPLUS"
+      "CLAIM COLLATERAL SURPLUS",
     );
     return _claimCollSuplusTxSuccess;
   }
@@ -2154,7 +2152,7 @@ function App() {
   async function stakeLPCall(connectedAddr, uniPoolContract, _stakeAmt) {
     let _params = await prepareTxParams();
     console.log(
-      connectedAddr + " stake into UniPool with lp=" + fromBn(_stakeAmt)
+      connectedAddr + " stake into UniPool with lp=" + fromBn(_stakeAmt),
     );
     let _stakeLPTx = await uniPoolContract.stake(_stakeAmt);
     let _stakeLPTxSuccess = await waitSubmittedTx(_stakeLPTx, "STAKE LP");
@@ -2167,7 +2165,7 @@ function App() {
     let _withdrawLPTx = await uniPoolContract.withdrawAndClaim();
     let _withdrawLPTxSuccess = await waitSubmittedTx(
       _withdrawLPTx,
-      "WITHDRAW LP"
+      "WITHDRAW LP",
     );
     return _withdrawLPTxSuccess;
   }
@@ -2178,7 +2176,7 @@ function App() {
     let _claimLPTx = await uniPoolContract.claimReward();
     let _claimLPTxSuccess = await waitSubmittedTx(
       _claimLPTx,
-      "CLAIM LP REWARD"
+      "CLAIM LP REWARD",
     );
     return _claimLPTxSuccess;
   }
@@ -2213,7 +2211,7 @@ function App() {
   /////////////////////////////////////////////////
 
   return (
-    <div id="globalContainer" className="container-fluid">
+    <div id="globalContainer" className="container-fluid font-grid-black">
       <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -2460,7 +2458,8 @@ function App() {
                     data-tip="Deposit in Stability Pool will earn SATO issuance & liquidated collateral"
                     data-for="totalSPDepositTip"
                   >
-                    Total Stability Pool Deposit <i class="bi bi-award-fill"></i>
+                    Total Stability Pool Deposit{" "}
+                    <i className="bi bi-award-fill"></i>
                   </h5>
                   <p className="card-text" id="statsTotalSPDeposit"></p>
                 </div>
@@ -2474,7 +2473,8 @@ function App() {
                     data-tip="Staked SATO will earn protocol fee in minting and redemption"
                     data-for="totalSATOStakedTip"
                   >
-                    Total SATO Staked <img src="/SATO.png" id="addSatoTokenBtn"></img>
+                    Total SATO Staked{" "}
+                    <img src="/SATO.png" id="addSatoTokenBtn"></img>
                   </h5>
                   <p className="card-text" id="statsTotalSATOStaked"></p>
                 </div>
@@ -3057,7 +3057,7 @@ function App() {
               </div>
             </form>
             <div className="col-auto">
-              Earned SATO <img src="/SATO.png"></img>
+              Rewarded SATO <img src="/SATO.png"></img>
               <input
                 id="satoEarnedInput"
                 type="text"
