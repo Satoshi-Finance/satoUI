@@ -2244,7 +2244,7 @@ function App() {
   }
 
   function formatTimestamp(ts) {
-    return moment(ts * 1000).format("yyyy-MM-dd HH:mm:ss");
+    return moment(ts * 1000).format("YYYY-MM-DD HH:mm:ss");
   }
 
   function formatAddress(originalAddr) {
