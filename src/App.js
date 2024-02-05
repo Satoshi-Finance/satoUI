@@ -9,6 +9,7 @@ import { evaluate } from "mathjs";
 import { Toast } from "bootstrap";
 import ReactTooltip from "react-tooltip";
 import { toBn, fromBn } from "evm-bn";
+import { format } from "date-fns";
 
 function App() {
   // constants
@@ -985,10 +986,19 @@ function App() {
       let _reqTime = _existSPDepoist["withdrawReqTime"].toNumber();
       let _diffTime = _now - _reqTime;
       console.log(
-        "_now=" + _now + ",reqTime=" + _reqTime + ",_diffTime=" + _diffTime,
+        "_now=" +
+          formatTimestamp(_now) +
+          ",reqTime=" +
+          formatTimestamp(_reqTime) +
+          ",_diffSeconds=" +
+          _diffTime,
       );
       document.querySelector("#withdrawSPSummarySeconds").textContent =
-        "" + _diffTime;
+        "" +
+        _diffTime +
+        " (could be confirmed after " +
+        formatTimestamp(_reqTime + 1800) +
+        ")";
       if (_diffTime > SP_WITHDRAW_LOCK) {
         document.querySelector("#withdrawSPBtn").disabled = false;
       }
@@ -1168,6 +1178,17 @@ function App() {
 
     var toastContent = document.querySelector("#toastContent");
     toastContent.textContent = msg;
+
+    toast.show();
+  }
+
+  function showToastMessageForTxSubmit(link) {
+    var toastTx = document.querySelector("#txSuccessToast");
+    var toast = new Toast(toastTx);
+
+    var toastLink = document.querySelector("#txSucessToastLink");
+    toastLink.textContent = "Congrats! Your transaction in now on chain.";
+    toastLink.href = link;
 
     toast.show();
   }
@@ -1521,7 +1542,7 @@ function App() {
     let _txExplorer = testnet
       ? "https://testnet.bscscan.com/tx/"
       : "https://bscscan.com/tx/";
-    showToastMessage(_action + " Tx Submitted " + _txExplorer + _tx.hash);
+    showToastMessageForTxSubmit(_txExplorer + _tx.hash);
 
     try {
       const receipt = await _tx.wait();
@@ -1942,6 +1963,12 @@ function App() {
       coll,
       _params,
     );
+
+    var _openTroveModalClose = document.querySelector(
+      "#openTroveModalCloseBtn",
+    );
+    _openTroveModalClose.click();
+
     let _openTroveTxSuccess = await waitSubmittedTx(_openTroveTx, "OPEN TROVE");
     return _openTroveTxSuccess;
   }
@@ -1971,6 +1998,12 @@ function App() {
       _debtChange,
       _isDebtIncrease,
     );
+
+    var _adjustTroveModalClose = document.querySelector(
+      "#adjustTroveModalCloseBtn",
+    );
+    _adjustTroveModalClose.click();
+
     let _adjustTroveTxSuccess = await waitSubmittedTx(
       _adjustTroveTx,
       "ADJUST TROVE",
@@ -1981,6 +2014,12 @@ function App() {
   async function closeTroveCall(borrowerOperationsContract) {
     let _params = await prepareTxParams();
     let _closeTroveTx = await borrowerOperationsContract.closeTrove(_params);
+
+    var _closeTroveModalClose = document.querySelector(
+      "#closeTroveModalCloseBtn",
+    );
+    _closeTroveModalClose.click();
+
     let _closeTroveTxSuccess = await waitSubmittedTx(
       _closeTroveTx,
       "CLOSE TROVE",
@@ -2077,6 +2116,12 @@ function App() {
     );
     let _withdrawSPTx =
       await stabilityPoolContract.withdrawFromSP(_withdrawAmt);
+
+    var _withdrawSPModalClose = document.querySelector(
+      "#withdrawSPModalCloseBtn",
+    );
+    _withdrawSPModalClose.click();
+
     let _withdrawSPTxSuccess = await waitSubmittedTx(
       _withdrawSPTx,
       _withdrawAmt.gt(zeroBN) ? "WITHDRAW SP" : "CLAIM EARNING",
@@ -2198,6 +2243,10 @@ function App() {
     return parseInt("" + Date.now() / 1000);
   }
 
+  function formatTimestamp(ts) {
+    return format(ts * 1000, "yyyy-MM-dd HH:mm:ss");
+  }
+
   function formatAddress(originalAddr) {
     return originalAddr.substring(0, 6) + "***" + originalAddr.substring(38);
   }
@@ -2300,6 +2349,39 @@ function App() {
             ></button>
           </div>
           <div className="toast-body" id="toastContent"></div>
+        </div>
+      </div>
+      <br />
+
+      <div className="position-fixed bottom-0 end-0 p-3">
+        <div
+          id="txSuccessToast"
+          className="toast"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+        >
+          <div className="toast-header">
+            <img
+              src="/favicon.ico"
+              className="rounded me-2"
+              alt="Satoshi Finance Logo"
+            ></img>
+            <strong className="me-auto">Satoshi Finance</strong>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="toast"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div className="toast-body">
+            <a
+              target="_blank"
+              rel="noreferrer noopener"
+              id="txSucessToastLink"
+            ></a>
+          </div>
         </div>
       </div>
       <br />
@@ -2420,7 +2502,8 @@ function App() {
               <div className="card" style={{ border: "none" }}>
                 <div className="card-body">
                   <h5 className="card-title">
-                    Total Debt<img src="/btUSD.png" id="addBTUSDTokenBtn"></img>
+                    Total Debt{" "}
+                    <img src="/btUSD.png" id="addBTUSDTokenBtn"></img>
                   </h5>
                   <p className="card-text" id="statsTotalDebt"></p>
                 </div>
@@ -2561,7 +2644,7 @@ function App() {
               style={{ display: "none" }}
             >
               <div className="col-auto">
-                Trove Debt<img src="/btUSD.png"></img>
+                Trove Debt <img src="/btUSD.png"></img>
                 <input
                   id="openTroveDebtInput"
                   type="number"
@@ -2634,7 +2717,7 @@ function App() {
               </div>
               <div className="col-auto">
                 <div>
-                  My Trove Debt<img src="/btUSD.png"></img>
+                  My Trove Debt <img src="/btUSD.png"></img>
                 </div>
                 <input
                   id="showTroveDebt"
@@ -2703,6 +2786,7 @@ function App() {
                     className="btn-close"
                     data-bs-dismiss="modal"
                     aria-label="Close"
+                    id="openTroveModalCloseBtn"
                   ></button>
                 </div>
                 <div className="modal-body">
@@ -2779,6 +2863,7 @@ function App() {
                     className="btn-close"
                     data-bs-dismiss="modal"
                     aria-label="Close"
+                    id="closeTroveModalCloseBtn"
                   ></button>
                 </div>
                 <div className="modal-body">
@@ -2855,6 +2940,7 @@ function App() {
                     className="btn-close"
                     data-bs-dismiss="modal"
                     aria-label="Close"
+                    id="adjustTroveModalCloseBtn"
                   ></button>
                 </div>
                 <div className="modal-body">
@@ -2867,7 +2953,7 @@ function App() {
                       id="adjustTroveSummaryColl"
                     ></li>
                     <div>
-                      Trove Debt<img src="/btUSD.png"></img>
+                      Trove Debt <img src="/btUSD.png"></img>
                     </div>{" "}
                     <li
                       className="list-group-item"
@@ -2880,7 +2966,7 @@ function App() {
                     ></li>
                     <div id="adjustTroveFee" style={{ display: "none" }}>
                       <div>
-                        Add Debt Fee<img src="/btUSD.png"></img>
+                        Add Debt Fee <img src="/btUSD.png"></img>
                       </div>{" "}
                       <li
                         className="list-group-item"
@@ -2931,7 +3017,7 @@ function App() {
                   </div>
                   <div className="col-auto">
                     <div>
-                      Debt Change<img src="/btUSD.png"></img>
+                      Debt Change <img src="/btUSD.png"></img>
                     </div>
                     <input
                       id="adjustTroveDebtChange"
@@ -3000,7 +3086,7 @@ function App() {
           <div className="d-grid gap-2 col-6 mx-auto">
             <br />
             <div className="col-auto">
-              My Deposit<img src="/btUSD.png"></img>
+              My Deposit <img src="/btUSD.png"></img>
               <input
                 id="spDepositedInput"
                 type="number"
@@ -3097,6 +3183,7 @@ function App() {
                     className="btn-close"
                     data-bs-dismiss="modal"
                     aria-label="Close"
+                    id="withdrawSPModalCloseBtn"
                   ></button>
                 </div>
                 <div className="modal-body">
@@ -3229,7 +3316,7 @@ function App() {
                 data-tip="Redemption fee earned will increase when redemption happens"
                 data-for="redemptionEarnedFeeTip"
               ></input>
-              Earned Mint Fee<img src="/btUSD.png"></img>
+              Earned Mint Fee <img src="/btUSD.png"></img>
               <input
                 id="borrowingEarnedInput"
                 type="text"
