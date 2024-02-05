@@ -9,7 +9,7 @@ import { evaluate } from "mathjs";
 import { Toast } from "bootstrap";
 import ReactTooltip from "react-tooltip";
 import { toBn, fromBn } from "evm-bn";
-import { format } from "date-fns";
+import moment from 'moment';
 
 function App() {
   // constants
@@ -2244,7 +2244,7 @@ function App() {
   }
 
   function formatTimestamp(ts) {
-    return format(ts * 1000, "yyyy-MM-dd HH:mm:ss");
+    return moment(ts * 1000).format("yyyy-MM-dd HH:mm:ss");
   }
 
   function formatAddress(originalAddr) {
