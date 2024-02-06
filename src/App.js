@@ -9,7 +9,7 @@ import { evaluate } from "mathjs";
 import { Toast } from "bootstrap";
 import ReactTooltip from "react-tooltip";
 import { toBn, fromBn } from "evm-bn";
-import moment from 'moment';
+import moment from "moment";
 
 function App() {
   // constants
@@ -1187,7 +1187,8 @@ function App() {
     var toast = new Toast(toastTx);
 
     var toastLink = document.querySelector("#txSucessToastLink");
-    toastLink.textContent = "Congrats! Your transaction in now on chain.";
+    toastLink.textContent =
+      " Congrats! Your transaction is now on chain. Click here to check details.";
     toastLink.href = link;
 
     toast.show();
@@ -2276,6 +2277,18 @@ function App() {
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossOrigin="anonymous"
       ></script>
+      <style jsx="true">{`
+        a {
+          text-decoration: none;
+          border-bottom: none;
+        }
+        .nav-link {
+          color: #059469;
+        }
+        .nav-pills .nav-link.active {
+          background-color: #7cebb7;
+        }
+      `}</style>
 
       <h1>
         <img src="/satofi.png" alt="Satoshi Finance Logo"></img>Satoshi Finance
@@ -2376,6 +2389,7 @@ function App() {
             ></button>
           </div>
           <div className="toast-body">
+            <i className="bi bi-check-circle-fill"></i>
             <a
               target="_blank"
               rel="noreferrer noopener"
@@ -2386,7 +2400,7 @@ function App() {
       </div>
       <br />
 
-      <ul className="nav nav-tabs" id="myTab" role="tablist">
+      <ul className="nav nav-pills" id="myTab" role="tablist">
         <li className="nav-item" role="presentation">
           <button
             className="nav-link active"
@@ -2440,7 +2454,7 @@ function App() {
             aria-controls="satoSTK"
             aria-selected="false"
           >
-            <b>Staking</b>
+            <b>Staking </b>
             <span
               id="premiumBadge"
               className="badge rounded-pill bg-success"
@@ -2779,7 +2793,7 @@ function App() {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title" id="openTroveConfirmModalLabel">
-                    Open Trove Summary
+                    <i className="bi bi-door-open-fill"></i> Open Trove Summary
                   </h5>
                   <button
                     type="button"
@@ -2856,7 +2870,8 @@ function App() {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title" id="closeTroveConfirmModalLabel">
-                    Close Trove Summary
+                    <i className="bi bi-door-closed-fill"></i> Close Trove
+                    Summary
                   </h5>
                   <button
                     type="button"
@@ -2933,7 +2948,7 @@ function App() {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title" id="adjustTroveConfirmModalLabel">
-                    Adjust Trove Summary
+                    <i className="bi bi-calculator"></i> Adjust Trove Summary
                   </h5>
                   <button
                     type="button"
@@ -3149,7 +3164,7 @@ function App() {
                 type="text"
                 className="form-control"
                 disabled
-                data-tip="Shown earned SATO may be less than what is claimable"
+                data-tip="You could stake rewarded SATO to earn protcol fees"
                 data-for="spEarnedSATOTip"
               ></input>
               Earned Collateral <img src="/BTCB.png"></img>
@@ -3176,7 +3191,8 @@ function App() {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title" id="withdrawSPConfirmModalLabel">
-                    Pending btUSD Withdrawal Summary
+                    <i className="bi bi-hourglass-split"></i> Pending btUSD
+                    Withdrawal Summary
                   </h5>
                   <button
                     type="button"
