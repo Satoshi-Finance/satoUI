@@ -29,7 +29,7 @@ a {
   transition: all 0.2s ease;
 }
 a:hover {
-  border-bottom: 1px solid #0076ff;
+  
 }
 code,
 pre {
@@ -52,4 +52,7 @@ code:after {
 }
 .font-grid-black {
   font-family: "grid-black";
+}
+.topBadgePill {
+  margin-top: 5%	
 }
