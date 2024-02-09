@@ -297,7 +297,7 @@ function App() {
         fromBn(_stabilityPoolStatus["totalDeposit"]) +
         " (" +
         icrToPercentageStr(_spTotalDepositPercentage) +
-        " of total supply)";
+        " of btUSD supply)";
       let _satoRewardStatus = await getSATORewardStatusCall(
         _communityIssuanceContract,
       );
@@ -518,7 +518,7 @@ function App() {
       _correctChain = _chainId == 97 ? true : false;
     }
     if (!_correctChain) {
-      showToastMessage("Please connect to Binance(BNB) Smart Chain.");
+      showToastMessage("Please connect to BNB Smart Chain.");
     }
   }
 
@@ -588,6 +588,7 @@ function App() {
     );
     if (_approveSuccess) {
       document.querySelector("#approveCollBtn").style["display"] = "none";
+      document.querySelector("#txSuccessToastCloseBtn").click();
     }
   };
 
@@ -605,6 +606,7 @@ function App() {
     );
     if (_approveSuccess) {
       document.querySelector("#approveDebtCloseBtn").style["display"] = "none";
+      document.querySelector("#txSuccessToastCloseBtn").click();
     }
   };
 
@@ -624,6 +626,7 @@ function App() {
       if (_approveSuccess) {
         document.querySelector("#approveDebtAdjustBtn").style["display"] =
           "none";
+        document.querySelector("#txSuccessToastCloseBtn").click();
       }
     };
 
@@ -778,6 +781,25 @@ function App() {
     });
     let connectedAddr = accounts[0];
 
+    let _switch = document.querySelector("#adjustTroveAddCollSwitch");
+    let _switchHint = document.querySelector(
+      "#adjustTroveCollChangeSwitchHint",
+    );
+    if (_switch.checked) {
+      _switchHint.textContent = "Add Collateral";
+    } else {
+      _switchHint.textContent = "Withdraw Collateral";
+    }
+    let _switchDebt = document.querySelector("#adjustTroveAddDebtSwitch");
+    let _switchHintDebt = document.querySelector(
+      "#adjustTroveDebtChangeSwitchHint",
+    );
+    if (_switchDebt.checked) {
+      _switchHintDebt.textContent = "Add Debt";
+    } else {
+      _switchHintDebt.textContent = "Repay Debt";
+    }
+
     const troveManagerContract = getTroveManagerSignerContract();
     let _troveCollAndDebt = await getEntireDebtAndCollCall(
       troveManagerContract,
@@ -867,6 +889,14 @@ function App() {
       reloadPage();
     }
   };
+
+  window.registerNotificationListener =
+    async function registerNotificationListener() {
+      let _msgToSign = document.querySelector(
+        "#registerNotificationMsgToSign",
+      ).textContent;
+      await requestPersonalSign(_msgToSign);
+    };
 
   ///////////////////////////////////////////////////////////////////////////
   // UI listener methods for btUSD Stability Pool
@@ -1106,6 +1136,7 @@ function App() {
     );
     if (_approveSuccess) {
       document.querySelector("#approveStakeLPBtn").style["display"] = "none";
+      document.querySelector("#txSuccessToastCloseBtn").click();
     }
   };
 
@@ -1168,6 +1199,31 @@ function App() {
   // General UI methods
   ///////////////////////////////////////////////////////////////////////////
 
+  async function requestPersonalSign(msgToSign) {
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      let connectedAddr = accounts[0];
+      const msg = `0x${Buffer.from(msgToSign, "utf8").toString("hex")}`;
+      const signedMessage = await window.ethereum.request({
+        method: "personal_sign",
+        params: [msg, connectedAddr],
+      });
+      console.info(
+        msgToSign +
+          " signed as:" +
+          signedMessage +
+          " by address " +
+          (await utils.verifyMessage(utils.arrayify(msg), signedMessage)),
+      );
+      document.querySelector("#registerNotificationSignedMsg").textContent =
+        signedMessage;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   function reloadPage() {
     window.location.reload(false);
   }
@@ -1197,6 +1253,7 @@ function App() {
   function showConnectedAddress(connectedAddr) {
     const connectWalletButton = document.querySelector("#connectWalletBtn");
     connectWalletButton.textContent = formatAddress(connectedAddr);
+    connectWalletButton.disabled = true;
     console.log("Connected as " + connectedAddr);
 
     ///////////////////////////////////////////////////////////////////////////
@@ -1323,6 +1380,14 @@ function App() {
       _claimCollSurplusAdjustTroveBtn,
       "click",
       window.claimCollSurplusListener,
+    );
+    const _registerNotificationBtn = document.querySelector(
+      "#registerNotificationBtn",
+    );
+    removeAddListener(
+      _registerNotificationBtn,
+      "click",
+      window.registerNotificationListener,
     );
 
     ///////////////////////////////////////////////////////////////////////////
@@ -2310,7 +2375,7 @@ function App() {
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                TWITTER
+                SOCIAL
               </a>
             </span>
             <span className="badge rounded-pill bg-light topBadgePill">
@@ -2355,13 +2420,17 @@ function App() {
                 LIQUIDITY
               </a>
             </span>
-            <span className="badge rounded-pill bg-light topBadgePill">
+            <span className="badge rounded-pill bg-secondary topBadgePill">
               <img
                 style={{ width: "24px" }}
                 src="data:image/svg+xml,%3Csvg%20fill%3D%22none%22%20height%3D%2233%22%20viewBox%3D%220%200%2035%2033%22%20width%3D%2235%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%22.25%22%3E%3Cpath%20d%3D%22m32.9582%201-13.1341%209.7183%202.4424-5.72731z%22%20fill%3D%22%23e17726%22%20stroke%3D%22%23e17726%22%2F%3E%3Cg%20fill%3D%22%23e27625%22%20stroke%3D%22%23e27625%22%3E%3Cpath%20d%3D%22m2.66296%201%2013.01714%209.809-2.3254-5.81802z%22%2F%3E%3Cpath%20d%3D%22m28.2295%2023.5335-3.4947%205.3386%207.4829%202.0603%202.1436-7.2823z%22%2F%3E%3Cpath%20d%3D%22m1.27281%2023.6501%202.13055%207.2823%207.46994-2.0603-3.48166-5.3386z%22%2F%3E%3Cpath%20d%3D%22m10.4706%2014.5149-2.0786%203.1358%207.405.3369-.2469-7.969z%22%2F%3E%3Cpath%20d%3D%22m25.1505%2014.5149-5.1575-4.58704-.1688%208.05974%207.4049-.3369z%22%2F%3E%3Cpath%20d%3D%22m10.8733%2028.8721%204.4819-2.1639-3.8583-3.0062z%22%2F%3E%3Cpath%20d%3D%22m20.2659%2026.7082%204.4689%202.1639-.6105-5.1701z%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22m24.7348%2028.8721-4.469-2.1639.3638%202.9025-.039%201.231z%22%20fill%3D%22%23d5bfb2%22%20stroke%3D%22%23d5bfb2%22%2F%3E%3Cpath%20d%3D%22m10.8732%2028.8721%204.1572%201.9696-.026-1.231.3508-2.9025z%22%20fill%3D%22%23d5bfb2%22%20stroke%3D%22%23d5bfb2%22%2F%3E%3Cpath%20d%3D%22m15.1084%2021.7842-3.7155-1.0884%202.6243-1.2051z%22%20fill%3D%22%23233447%22%20stroke%3D%22%23233447%22%2F%3E%3Cpath%20d%3D%22m20.5126%2021.7842%201.0913-2.2935%202.6372%201.2051z%22%20fill%3D%22%23233447%22%20stroke%3D%22%23233447%22%2F%3E%3Cpath%20d%3D%22m10.8733%2028.8721.6495-5.3386-4.13117.1167z%22%20fill%3D%22%23cc6228%22%20stroke%3D%22%23cc6228%22%2F%3E%3Cpath%20d%3D%22m24.0982%2023.5335.6366%205.3386%203.4946-5.2219z%22%20fill%3D%22%23cc6228%22%20stroke%3D%22%23cc6228%22%2F%3E%3Cpath%20d%3D%22m27.2291%2017.6507-7.405.3369.6885%203.7966%201.0913-2.2935%202.6372%201.2051z%22%20fill%3D%22%23cc6228%22%20stroke%3D%22%23cc6228%22%2F%3E%3Cpath%20d%3D%22m11.3929%2020.6958%202.6242-1.2051%201.0913%202.2935.6885-3.7966-7.40495-.3369z%22%20fill%3D%22%23cc6228%22%20stroke%3D%22%23cc6228%22%2F%3E%3Cpath%20d%3D%22m8.392%2017.6507%203.1049%206.0513-.1039-3.0062z%22%20fill%3D%22%23e27525%22%20stroke%3D%22%23e27525%22%2F%3E%3Cpath%20d%3D%22m24.2412%2020.6958-.1169%203.0062%203.1049-6.0513z%22%20fill%3D%22%23e27525%22%20stroke%3D%22%23e27525%22%2F%3E%3Cpath%20d%3D%22m15.797%2017.9876-.6886%203.7967.8704%204.4833.1949-5.9087z%22%20fill%3D%22%23e27525%22%20stroke%3D%22%23e27525%22%2F%3E%3Cpath%20d%3D%22m19.8242%2017.9876-.3638%202.3584.1819%205.9216.8704-4.4833z%22%20fill%3D%22%23e27525%22%20stroke%3D%22%23e27525%22%2F%3E%3Cpath%20d%3D%22m20.5127%2021.7842-.8704%204.4834.6236.4406%203.8584-3.0062.1169-3.0062z%22%20fill%3D%22%23f5841f%22%20stroke%3D%22%23f5841f%22%2F%3E%3Cpath%20d%3D%22m11.3929%2020.6958.104%203.0062%203.8583%203.0062.6236-.4406-.8704-4.4834z%22%20fill%3D%22%23f5841f%22%20stroke%3D%22%23f5841f%22%2F%3E%3Cpath%20d%3D%22m20.5906%2030.8417.039-1.231-.3378-.2851h-4.9626l-.3248.2851.026%201.231-4.1572-1.9696%201.4551%201.1921%202.9489%202.0344h5.0536l2.962-2.0344%201.442-1.1921z%22%20fill%3D%22%23c0ac9d%22%20stroke%3D%22%23c0ac9d%22%2F%3E%3Cpath%20d%3D%22m20.2659%2026.7082-.6236-.4406h-3.6635l-.6236.4406-.3508%202.9025.3248-.2851h4.9626l.3378.2851z%22%20fill%3D%22%23161616%22%20stroke%3D%22%23161616%22%2F%3E%3Cpath%20d%3D%22m33.5168%2011.3532%201.1043-5.36447-1.6629-4.98873-12.6923%209.3944%204.8846%204.1205%206.8983%202.0085%201.52-1.7752-.6626-.4795%201.0523-.9588-.8054-.622%201.0523-.8034z%22%20fill%3D%22%23763e1a%22%20stroke%3D%22%23763e1a%22%2F%3E%3Cpath%20d%3D%22m1%205.98873%201.11724%205.36447-.71451.5313%201.06527.8034-.80545.622%201.05228.9588-.66255.4795%201.51997%201.7752%206.89835-2.0085%204.8846-4.1205-12.69233-9.3944z%22%20fill%3D%22%23763e1a%22%20stroke%3D%22%23763e1a%22%2F%3E%3Cpath%20d%3D%22m32.0489%2016.5234-6.8983-2.0085%202.0786%203.1358-3.1049%206.0513%204.1052-.0519h6.1318z%22%20fill%3D%22%23f5841f%22%20stroke%3D%22%23f5841f%22%2F%3E%3Cpath%20d%3D%22m10.4705%2014.5149-6.89828%202.0085-2.29944%207.1267h6.11883l4.10519.0519-3.10487-6.0513z%22%20fill%3D%22%23f5841f%22%20stroke%3D%22%23f5841f%22%2F%3E%3Cpath%20d%3D%22m19.8241%2017.9876.4417-7.5932%202.0007-5.4034h-8.9119l2.0006%205.4034.4417%207.5932.1689%202.3842.013%205.8958h3.6635l.013-5.8958z%22%20fill%3D%22%23f5841f%22%20stroke%3D%22%23f5841f%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"
               ></img>
               <button
-                style={{ height: "24px", padding: "0 0.55rem 0 0.55rem" }}
+                style={{
+                  height: "24px",
+                  padding: "0 0.55rem 0 0.55rem",
+                  border: "none",
+                }}
                 type="button"
                 id="connectWalletBtn"
                 className="btn btn-outline-warning"
@@ -2420,6 +2489,7 @@ function App() {
               className="btn-close"
               data-bs-dismiss="toast"
               aria-label="Close"
+              id="txSuccessToastCloseBtn"
             ></button>
           </div>
           <div className="toast-body">
@@ -2586,7 +2656,7 @@ function App() {
                 <div className="card-body">
                   <h5
                     className="card-title"
-                    data-tip="Deposit in Stability Pool will earn SATO issuance & liquidated collateral"
+                    data-tip="Deposit in Stability Pool will earn SATO rewards & liquidated collateral"
                     data-for="totalSPDepositTip"
                   >
                     Total Stability Pool Deposit{" "}
@@ -2709,7 +2779,7 @@ function App() {
                   style={{ display: "none" }}
                   type="button"
                   className="btn btn-info mb-2"
-                  data-tip="You need to approve collateral"
+                  data-tip="You need to approve collateral to open a trove"
                   data-for="approveCollTip"
                   style={{ margin: 2 }}
                 >
@@ -2796,6 +2866,15 @@ function App() {
                 </button>
                 <button
                   type="button"
+                  className="btn btn-primary mb-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#registerNotificationConfirmModal"
+                  style={{ margin: 5 }}
+                >
+                  <i className="bi bi-telegram"></i> Notification
+                </button>
+                <button
+                  type="button"
                   className="btn btn-warning mb-2"
                   style={{ margin: 5 }}
                   id="claimCollSurplusAdjustTroveBtn"
@@ -2818,7 +2897,7 @@ function App() {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title" id="openTroveConfirmModalLabel">
-                    <i className="bi bi-door-open-fill"></i> Open Trove Summary
+                    <i className="bi bi-magic"></i> Open Trove Summary
                   </h5>
                   <button
                     type="button"
@@ -2829,6 +2908,24 @@ function App() {
                   ></button>
                 </div>
                 <div className="modal-body">
+                  <p>
+                    <i className="bi bi-info-circle-fill"></i> Please ensure you{" "}
+                    <b>understand</b> what do{" "}
+                    <a
+                      target="_blank"
+                      href="https://satoshi-finance.github.io/satofi.github.io/btUSD%20stability%20pool%20and%20liquidation/"
+                    >
+                      liquidation
+                    </a>{" "}
+                    and{" "}
+                    <a
+                      target="_blank"
+                      href="https://satoshi-finance.github.io/satofi.github.io/Efficient%20Redemption/"
+                    >
+                      redemption
+                    </a>{" "}
+                    mean before opening trove.
+                  </p>
                   <ul className="list-group">
                     <div>
                       Trove Collateral <img src="/BTCB.png"></img>
@@ -2838,14 +2935,14 @@ function App() {
                       id="openTroveSummaryColl"
                     ></li>
                     <div>
-                      Trove Debt<img src="/btUSD.png"></img>
+                      Trove Debt <img src="/btUSD.png"></img>
                     </div>{" "}
                     <li
                       className="list-group-item"
                       id="openTroveSummaryDebt"
                     ></li>
                     <div>
-                      Fee<img src="/btUSD.png"></img>
+                      Fee <img src="/btUSD.png"></img>
                     </div>{" "}
                     <li
                       className="list-group-item"
@@ -2895,7 +2992,7 @@ function App() {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title" id="closeTroveConfirmModalLabel">
-                    <i className="bi bi-door-closed-fill"></i> Close Trove
+                    <i className="bi bi-stop-circle-fill"></i> Close Trove
                     Summary
                   </h5>
                   <button
@@ -2916,7 +3013,7 @@ function App() {
                       id="closeTroveSummaryColl"
                     ></li>
                     <div>
-                      Trove Debt<img src="/btUSD.png"></img>
+                      Trove Debt <img src="/btUSD.png"></img>
                     </div>{" "}
                     <li
                       className="list-group-item"
@@ -2953,6 +3050,80 @@ function App() {
                     id="closeTroveBtn"
                     type="button"
                     className="btn btn-danger"
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+
+          <div
+            className="modal fade"
+            id="registerNotificationConfirmModal"
+            tabIndex="-1"
+            aria-labelledby="registerNotificationConfirmModalLabel"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5
+                    className="modal-title"
+                    id="registerNotificationConfirmModalLabel"
+                  >
+                    <i className="bi bi-telegram"></i> Register Telegram
+                    Notification
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <ul className="list-group">
+                    <div>
+                      <b>STEP[1]</b> You will be prompted to sign following
+                      message as part of registration. Click confirm to start.
+                    </div>{" "}
+                    <li
+                      className="list-group-item"
+                      id="registerNotificationMsgToSign"
+                    >
+                      I want to register telegram notification for my Trove in
+                      Satoshi Finance.
+                    </li>
+                    <br />
+                    <div>
+                      <b>STEP[2]</b> After signing, please copy-paste following
+                      signed content to{" "}
+                      <a target="_blank" href="https://t.me/satoTestBot">
+                        our telegram bot
+                      </a>
+                      .
+                    </div>{" "}
+                    <li
+                      className="list-group-item"
+                      style={{ wordWrap: "break-word" }}
+                      id="registerNotificationSignedMsg"
+                    ></li>
+                  </ul>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    id="registerNotificationBtn"
+                    type="button"
+                    className="btn btn-primary"
                   >
                     Confirm
                   </button>
@@ -3026,7 +3197,9 @@ function App() {
                       className="form-check-label"
                       htmlFor="adjustTroveAddCollSwitch"
                     >
-                      <b>Add Collateral</b>
+                      <b id="adjustTroveCollChangeSwitchHint">
+                        Withdraw Collateral
+                      </b>
                     </label>
                   </div>
                   <div className="col-auto">
@@ -3052,7 +3225,7 @@ function App() {
                       className="form-check-label"
                       htmlFor="adjustTroveAddDebtSwitch"
                     >
-                      <b>Add Debt</b>
+                      <b id="adjustTroveDebtChangeSwitchHint">Repay Debt</b>
                     </label>
                   </div>
                   <div className="col-auto">
@@ -3189,7 +3362,7 @@ function App() {
                 type="text"
                 className="form-control"
                 disabled
-                data-tip="You could stake rewarded SATO to earn protcol fees"
+                data-tip="You could stake rewarded SATO to earn protocol fees"
                 data-for="spEarnedSATOTip"
               ></input>
               Earned Collateral <img src="/BTCB.png"></img>
@@ -3363,7 +3536,7 @@ function App() {
                 type="text"
                 className="form-control"
                 disabled
-                data-tip="Borrowing fee earned will increase when debt mint happens"
+                data-tip="Borrowing fee earned will increase when btUSD mint happens"
                 data-for="borrowingEarnedFeeTip"
               ></input>
             </div>
