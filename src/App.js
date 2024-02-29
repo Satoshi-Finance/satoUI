@@ -44,19 +44,19 @@ function App() {
   const testnet = true;
   const contractsAddressesTestnet = {
     collateralTokenAddr: "0x5E1Be8984a9E382f0e432bec93d8d245532Bf493",
-    activePoolAddr: "0xF68BC217147284C69F823E1B9745332b49A5CeDA",
-    borrowerOperationsAddr: "0x2a6D2Ba96067907C7813Aa83Df31B990bD0cd489",
-    btUSDAddr: "0xFf4d1DECf0b6c10B3cAc23aadB7f596Ca8E15190",
-    collSurplusPoolAddr: "0x23CeD69e91B43d2Bc46A0b207FECD3860Aa368AD",
-    defaultPoolAddr: "0xa5412D58B72558D98F550beFb86B2b7d82456a95",
+    activePoolAddr: "0x7084E5aB49b79c6cEA2CA9e30DB065CC1488aA8c",
+    borrowerOperationsAddr: "0x5dC5EA2066b6881B85ED07f26295b3f1495eaD52",
+    btUSDAddr: "0x6fBcd75977E15DA60fb3746cBa9f96097276734B",
+    collSurplusPoolAddr: "0x8Cf3Ff050b6894D61B7C8A9440d0FA3e5E61CD9D",
+    defaultPoolAddr: "0x56e34FC7B3B8639AE6F8E5779450792677B79d6B",
     priceFeedAddr: "0x28D2137b60ebFd44a7CB9297345197bfc0C1e898",
-    stabilityPoolAddr: "0x3f7214090C6b3da12A5b802F832FDE7f23D99D88",
-    troveManagerAddr: "0x43733A05154f6817F0aC18A14bE20a9101445C8C",
-    satoTokenAddr: "0x4236874BC85c896eca67e5699fD35ef05BDB44C5",
-    satoStakingAddr: "0xac9b5318554517d393a472A1AEc576c4178f4A31",
-    satoCommunityIssuanceAddr: "0xC600c0c1778f6915f41c8A823699420562d69437",
-    satoLockupFactoryAddr: "0xdB5588F8Fa5E32Df405248bDE7277f1c2974E6e1",
-    uniPoolAddr: "0x5da6429b905B02b1762798fbbFFDca906ff374b5",
+    stabilityPoolAddr: "0x0Aa3e0b1c3133EDDf5E4CB49F8FBef02D0dfD0bb",
+    troveManagerAddr: "0x57b447e55E965Bba4786f92a7c49C7524BDA6aEB",
+    satoTokenAddr: "0xEBdC7a41588D2e9dCE3F1C1212dDC77Db8d7f236",
+    satoStakingAddr: "0x3E74eb17f342F39F7f730f2557102E97b3662dae",
+    satoCommunityIssuanceAddr: "0x435572Fef1fE1423e02e2d68dcEc03F7eaeFfbEA",
+    satoLockupFactoryAddr: "0x220454641035B7cf1C4BDCeA47308b1D94DA6b53",
+    uniPoolAddr: "0x6E741cEfDAd573919714A890f542b77A4c9A5057",
     lpTokenAddr: "0x5E1Be8984a9E382f0e432bec93d8d245532Bf493",
   };
   const contractsAddresses = testnet
@@ -436,7 +436,9 @@ function App() {
           " or request to withdraw";
       }
       let _lastWithdrawReqTs = _existSPDepoist["withdrawReqTime"].toNumber();
-      let _lastWithdrawTs = 0; //(await _stabilityPoolContract.lastWithdrawTime(connectedAddr)).toNumber();
+      let _lastWithdrawTs = (
+        await _stabilityPoolContract.lastWithdrawTime(connectedAddr)
+      ).toNumber();
       let _now = getNowTime();
       let _tsSinceLastWithdrawReq = _now - _lastWithdrawReqTs;
       let _tsSinceLastWithdraw = _now - _lastWithdrawTs;
@@ -743,8 +745,7 @@ function App() {
       btUSDContract,
     );
     if (_debtToApprove.gt(zeroBN)) {
-      document.querySelector("#approveDebtCloseBtn").style["display"] =
-        "inline-block";
+      document.querySelector("#approveDebtCloseBtn").style["display"] = "none";
     } else {
       document.querySelector("#approveDebtCloseBtn").style["display"] = "none";
     }
@@ -787,8 +788,7 @@ function App() {
       btUSDContract,
     );
     if (_debtToApprove.gt(zeroBN)) {
-      document.querySelector("#approveDebtAdjustBtn").style["display"] =
-        "block";
+      document.querySelector("#approveDebtAdjustBtn").style["display"] = "none";
     } else {
       document.querySelector("#approveDebtAdjustBtn").style["display"] = "none";
     }
@@ -810,6 +810,8 @@ function App() {
         .div(_troveCollAndDebt["debt"]);
       document.querySelector("#adjustTroveSummaryICR").textContent =
         icrToPercentageStr(_icr);
+      document.querySelector("#adjustTroveSummaryICR").style["color"] =
+        crToColorDisplay(_icr);
     }
   };
 
@@ -1912,6 +1914,8 @@ function App() {
       "$" + fromBn(price);
     document.querySelector("#openTroveSummaryICR").textContent =
       icrToPercentageStr(_icr);
+    document.querySelector("#openTroveSummaryICR").style["color"] =
+      crToColorDisplay(_icr);
   }
 
   async function calculateAdjustTroveSummary(
@@ -1996,6 +2000,8 @@ function App() {
     );
     document.querySelector("#adjustTroveSummaryICR").textContent =
       icrToPercentageStr(_newTroveCollAndDebt[2]);
+    document.querySelector("#adjustTroveSummaryICR").style["color"] =
+      crToColorDisplay(_newTroveCollAndDebt[2]);
 
     let activePoolContract = await getActivePoolSignerContract();
     let _systemStatus = await getSystemStatusCall(
@@ -2430,7 +2436,7 @@ function App() {
                 src="data:image/png;base64,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"
               ></img>
               <a
-                href="https://satoshi-finance.github.io/satofi.github.io/"
+                href="https://github.com/Satoshi-Finance/security"
                 target="_blank"
                 rel="noreferrer noopener"
               >
