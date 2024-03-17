@@ -41,7 +41,7 @@ function App() {
   /////////////////////////////////////////////////
   // Smart Contracts addresses
   /////////////////////////////////////////////////
-  const testnet = true;
+  const testnet = false;
   const contractsAddressesTestnet = {
     collateralTokenAddr: "0x5E1Be8984a9E382f0e432bec93d8d245532Bf493",
     activePoolAddr: "0x7084E5aB49b79c6cEA2CA9e30DB065CC1488aA8c",
@@ -59,9 +59,26 @@ function App() {
     uniPoolAddr: "0x6E741cEfDAd573919714A890f542b77A4c9A5057",
     lpTokenAddr: "0x5E1Be8984a9E382f0e432bec93d8d245532Bf493",
   };
+  const contractsAddressesMainnet = {
+    collateralTokenAddr: "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+    activePoolAddr: "0x3B0750926f04cB9b8C01dfc02dc6E29524d00e8c",
+    borrowerOperationsAddr: "0x5E1Be8984a9E382f0e432bec93d8d245532Bf493",
+    btUSDAddr: "0xCEa3f851A89F3071b2570a27392f069f4097a8dC",
+    collSurplusPoolAddr: "0x9068298cB437E6fbDfb35c1F6e3561e68C01Fc87",
+    defaultPoolAddr: "0x75c72883A6Dea319E0Cf4b553d2bFf00E1c06a96",
+    priceFeedAddr: "0x14eBf8b6bDc973DedC4716644a7ecB56717497d5",
+    stabilityPoolAddr: "0x82fDfaDC2644cB9c8103e2ED9280338F1B55AA1C",
+    troveManagerAddr: "0x3cd34afeba07c02443BECBb2840506F4230f84cB",
+    satoTokenAddr: "0x708bAac4B235d3F62bD18e58c0594b8B20b2ED5B",
+    satoStakingAddr: "0x28c0e5160AB7B821A98745A3236aD2414F5dC041",
+    satoCommunityIssuanceAddr: "0xb64EE0d54EA724753db319771791474C2EED6575",
+    satoLockupFactoryAddr: "0x9DeFF442F3837797C7F4783393A9eFe3d5e4FDd9",
+    uniPoolAddr: "0x24691F205f3E15915DBecBf97DD6593A0B9528c5",
+    lpTokenAddr: "0x677fce0d985e870785ce63e07ae49d2d27358b78",
+  };
   const contractsAddresses = testnet
     ? contractsAddressesTestnet
-    : contractsAddressesTestnet;
+    : contractsAddressesMainnet;
 
   /////////////////////////////////////////////////
   // Smart Contracts ABIs
@@ -2493,7 +2510,7 @@ function App() {
                 src="data:image/webp;base64,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"
               ></img>
               <a
-                href="https://pancakeswap.finance"
+                href="https://pancakeswap.finance/info/pairs/0x470c86f408401EB033855feC0c18c5a5006Fc3CB"
                 target="_blank"
                 rel="noreferrer noopener"
               >
@@ -2794,7 +2811,13 @@ function App() {
                     data-tip="Get btUSD LP from PancakeSwap to participate in this LP Mining"
                     data-for="lpMiningTip"
                   >
-                    LP Mining <i className="bi bi-lightning-charge-fill"></i>
+                    <a
+                      href="https://pancakeswap.finance/info/pairs/0x677fce0d985e870785ce63e07ae49d2d27358b78"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      LP Mining <i className="bi bi-lightning-charge-fill"></i>
+                    </a>
                   </h5>
                   <div className="card-text" id="statsTotalSATOToBeMined">
                     <div className="col-auto">
