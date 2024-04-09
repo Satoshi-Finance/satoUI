@@ -387,6 +387,31 @@ function App() {
           document.querySelector("#showTroveICR").style["color"] =
             crToColorDisplay(_icr);
           document.querySelector("#showTroveICR").style["font-weight"] = "bold";
+
+          let _liquidationPrice1 = _myTroveDebtAndColl["debt"]
+            .mul(MCR)
+            .div(decimal18)
+            .div(_myTroveDebtAndColl["coll"]);
+          let _liquidationPrice2 = _myTroveDebtAndColl["debt"]
+            .mul(_troveSystemStatus["TCR"])
+            .div(decimal18)
+            .div(_myTroveDebtAndColl["coll"]);
+          console.log(
+            "liquidation price at MCR=" +
+              _liquidationPrice1 +
+              ", liquidation price at TCR=" +
+              _liquidationPrice2,
+          );
+          if (_troveSystemStatus["TCR"].lt(CCR)) {
+            document.querySelector("#showLiquidationPrice").value =
+              "$" +
+              (_liquidationPrice1.gt(_liquidationPrice2)
+                ? _liquidationPrice1
+                : _liquidationPrice2);
+          } else {
+            document.querySelector("#showLiquidationPrice").value =
+              "$" + _liquidationPrice1;
+          }
         }
 
         console.log(
@@ -3092,6 +3117,15 @@ function App() {
                 My Trove ICR
                 <input
                   id="showTroveICR"
+                  type="text"
+                  className="form-control"
+                  disabled
+                ></input>
+              </div>
+              <div className="col-auto">
+                Liquidation Price
+                <input
+                  id="showLiquidationPrice"
                   type="text"
                   className="form-control"
                   disabled
